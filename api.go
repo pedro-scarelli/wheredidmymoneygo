@@ -27,6 +27,7 @@ func NewAPIServer(listenAddr string, store Storage) *APIServer {
 func (s *APIServer) Run() {
 	router := mux.NewRouter()
 
+	router.HandleFunc("/login", makeHTTPHandleFunc(s.handleLogin))
 	router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
 	router.HandleFunc("/account/{id}", withJWTAuth(makeHTTPHandleFunc(s.handleAccountByID)))
 	router.HandleFunc("/transfer", makeHTTPHandleFunc(s.handleTransfer))
@@ -34,6 +35,33 @@ func (s *APIServer) Run() {
 	log.Println("JSON API server running on pswitcht: ", s.listenAddr)
 
 	http.ListenAndServe(s.listenAddr, router)
+}
+
+func (s *APIServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
+	if r.Method != "POST" {
+		return fmt.Errorf("method not allowed %s", r.Method)
+	}
+
+	loginRequest := new(LoginRequest)
+	if err := json.NewDecoder(r.Body).Decode(loginRequest); err != nil {
+		return err
+	}
+
+	account, err := s.store.GetAccountByCPF(loginRequest.CPF)
+	if err != nil {
+		return err
+	}
+
+	if IsPasswordIncorrect(loginRequest.Password, account.Password) {
+		return WriteJSON(w, http.StatusUnauthorized, map[string]string{"message": "CPF ou senha incorretos"})
+	}
+
+	token, err := createJWT(account)
+	if err != nil {
+		return err
+	}
+
+	return WriteJSON(w, http.StatusOK, map[string]string{"authToken": token, "message": "logado com sucesso"})
 }
 
 func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
@@ -88,17 +116,16 @@ func (s *APIServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) 
 		return err
 	}
 
-	account := NewAccount(createAccountRequest.FirstName, createAccountRequest.LastName)
-	if err := s.store.CreateAccount(account); err != nil {
-		return err
-	}
-
-	tokenString, err := createJWT(account)
+	account, err := NewAccount(createAccountRequest)
 	if err != nil {
 		return err
 	}
 
-	return WriteJSON(w, http.StatusOK, map[string]string{"tokenJWT": tokenString, "message": "account created"})
+	if err := s.store.CreateAccount(account); err != nil {
+		return err
+	}
+
+	return WriteJSON(w, http.StatusCreated, map[string]string{"message": "account created"})
 }
 
 func (s *APIServer) handleDeleteAccountByID(w http.ResponseWriter, r *http.Request) error {
@@ -133,7 +160,7 @@ func WriteJSON(w http.ResponseWriter, status int, v any) error {
 
 func createJWT(account *Account) (string, error) {
 	claims := &jwt.MapClaims{
-		"expiresAt":     15000,
+		"expiresAt":     3600,
 		"accountNumber": account.Number,
 	}
 
@@ -153,8 +180,8 @@ func withJWTAuth(handlerFunc http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		claims := token.Claims.(jwt.MapClaims)
-
+		// claims := token.Claims.(jwt.MapClaims)
+		// log.Println("Token: ", claims)
 		handlerFunc(w, r)
 	}
 }
@@ -168,7 +195,7 @@ func treatAuthorizationHeader(authorizationHeader string) string {
 }
 
 func validateJWT(tokenString string) (*jwt.Token, error) {
-	return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	return jwt.Parse(tokenString, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
