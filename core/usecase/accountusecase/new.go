@@ -1,12 +1,12 @@
-package accountusecase
+package userusecase
 
-import "github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
+import "github.com/pedro-scarelli/go_login/core/domain"
 
 type usecase struct {
-	repository domain.AccountRepository
+	repository domain.UserRepository
 }
 
-func New(repository domain.AccountRepository) domain.AccountUseCase {
+func New(repository domain.UserRepository) domain.UserUseCase {
 	return &usecase{
 		repository: repository,
 	}

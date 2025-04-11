@@ -1,10 +1,10 @@
-package accountservice
+package userservice
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	"github.com/pedro-scarelli/go_login/core/dto"
 )
 
 func (service service) Get(response http.ResponseWriter, request *http.Request) {
@@ -16,7 +16,7 @@ func (service service) Get(response http.ResponseWriter, request *http.Request) 
 		return
 	}
 
-	accounts, err := service.usecase.Get(paginationRequest)
+	users, err := service.usecase.Get(paginationRequest)
 
 	if err != nil {
 		response.WriteHeader(500)
@@ -24,5 +24,5 @@ func (service service) Get(response http.ResponseWriter, request *http.Request) 
 		return
 	}
 
-	json.NewEncoder(response).Encode(accounts)
+	json.NewEncoder(response).Encode(users)
 }

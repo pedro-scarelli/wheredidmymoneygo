@@ -1,17 +1,17 @@
 package di
 
 import (
-	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/http/accountservice"
-	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/postgres"
-	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/postgres/accountrepository"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/usecase/accountusecase"
+	"github.com/pedro-scarelli/go_login/adapter/http/userservice"
+	"github.com/pedro-scarelli/go_login/adapter/postgres"
+	"github.com/pedro-scarelli/go_login/adapter/postgres/userrepository"
+	"github.com/pedro-scarelli/go_login/core/domain"
+	"github.com/pedro-scarelli/go_login/core/usecase/userusecase"
 )
 
-func ConfigAccountDI(conn postgres.PoolInterface) domain.AccountService {
-	accountRepository := accountrepository.New(conn)
-	accountUseCase := accountusecase.New(accountRepository)
-	accountService := accountservice.New(accountUseCase)
+func ConfigUserDI(conn postgres.PoolInterface) domain.UserService {
+	userRepository := userrepository.New(conn)
+	userUseCase := userusecase.New(userRepository)
+	userService := userservice.New(userUseCase)
 
-	return accountService
+	return userService
 }

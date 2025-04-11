@@ -28,8 +28,8 @@ func (s *APIServer) Run() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/login", makeHTTPHandleFunc(s.handleLogin))
-	router.HandleFunc("/account", makeHTTPHandleFunc(s.handleAccount))
-	router.HandleFunc("/account/{id}", withJWTAuth(makeHTTPHandleFunc(s.handleAccountByID)))
+	router.HandleFunc("/user", makeHTTPHandleFunc(s.handleUser))
+	router.HandleFunc("/user/{id}", withJWTAuth(makeHTTPHandleFunc(s.handleUserByID)))
 	router.HandleFunc("/transfer", makeHTTPHandleFunc(s.handleTransfer))
 
 	log.Println("JSON API server running on pswitcht: ", s.listenAddr)
@@ -47,16 +47,16 @@ func (s *APIServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	account, err := s.store.GetAccountByCPF(loginRequest.CPF)
+	user, err := s.store.GetUserByCPF(loginRequest.CPF)
 	if err != nil {
 		return err
 	}
 
-	if IsPasswordIncorrect(loginRequest.Password, account.Password) {
+	if IsPasswordIncorrect(loginRequest.Password, user.Password) {
 		return WriteJSON(w, http.StatusUnauthorized, map[string]string{"message": "CPF ou senha incorretos"})
 	}
 
-	token, err := createJWT(account)
+	token, err := createJWT(user)
 	if err != nil {
 		return err
 	}
@@ -64,74 +64,74 @@ func (s *APIServer) handleLogin(w http.ResponseWriter, r *http.Request) error {
 	return WriteJSON(w, http.StatusOK, map[string]string{"authToken": token, "message": "logado com sucesso"})
 }
 
-func (s *APIServer) handleAccount(w http.ResponseWriter, r *http.Request) error {
+func (s *APIServer) handleUser(w http.ResponseWriter, r *http.Request) error {
 	switch r.Method {
 	case "GET":
-		return s.handleGetAccount(w)
+		return s.handleGetUser(w)
 	case "POST":
-		return s.handleCreateAccount(w, r)
+		return s.handleCreateUser(w, r)
 	default:
 		return fmt.Errorf("method not allowed %s", r.Method)
 	}
 }
 
-func (s *APIServer) handleAccountByID(w http.ResponseWriter, r *http.Request) error {
+func (s *APIServer) handleUserByID(w http.ResponseWriter, r *http.Request) error {
 	switch r.Method {
 	case "GET":
-		return s.handleGetAccountByID(w, r)
+		return s.handleGetUserByID(w, r)
 	case "DELETE":
-		return s.handleDeleteAccountByID(w, r)
+		return s.handleDeleteUserByID(w, r)
 	default:
 		return fmt.Errorf("method not allowed %s", r.Method)
 	}
 }
 
-func (s *APIServer) handleGetAccountByID(w http.ResponseWriter, r *http.Request) error {
+func (s *APIServer) handleGetUserByID(w http.ResponseWriter, r *http.Request) error {
 	id, err := getID(r)
 	if err != nil {
 		return err
 	}
 
-	account, err := s.store.GetAccountByID(id)
+	user, err := s.store.GetUserByID(id)
 	if err != nil {
 		return err
 	}
 
-	return WriteJSON(w, http.StatusOK, account)
+	return WriteJSON(w, http.StatusOK, user)
 }
 
-func (s *APIServer) handleGetAccount(w http.ResponseWriter) error {
-	accounts, err := s.store.GetAccounts()
+func (s *APIServer) handleGetUser(w http.ResponseWriter) error {
+	users, err := s.store.GetUsers()
 
 	if err != nil {
 		return err
 	}
 
-	return WriteJSON(w, http.StatusOK, accounts)
+	return WriteJSON(w, http.StatusOK, users)
 }
 
-func (s *APIServer) handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
-	createAccountRequest := new(CreateAccountRequest)
+func (s *APIServer) handleCreateUser(w http.ResponseWriter, r *http.Request) error {
+	createUserRequest := new(CreateUserRequest)
 
-	account, err := NewAccount(createAccountRequest)
+	user, err := NewUser(createUserRequest)
 	if err != nil {
 		return err
 	}
 
-	if err := s.store.CreateAccount(account); err != nil {
+	if err := s.store.CreateUser(user); err != nil {
 		return err
 	}
 
-	return WriteJSON(w, http.StatusCreated, map[string]string{"message": "account created"})
+	return WriteJSON(w, http.StatusCreated, map[string]string{"message": "user created"})
 }
 
-func (s *APIServer) handleDeleteAccountByID(w http.ResponseWriter, r *http.Request) error {
+func (s *APIServer) handleDeleteUserByID(w http.ResponseWriter, r *http.Request) error {
 	id, err := getID(r)
 	if err != nil {
 		return err
 	}
 
-	if err := s.store.DeleteAccount(id); err != nil {
+	if err := s.store.DeleteUser(id); err != nil {
 		return err
 	}
 
@@ -155,10 +155,10 @@ func WriteJSON(w http.ResponseWriter, status int, v any) error {
 	return json.NewEncoder(w).Encode(v)
 }
 
-func createJWT(account *Account) (string, error) {
+func createJWT(user *User) (string, error) {
 	claims := &jwt.MapClaims{
 		"expiresAt":     3600,
-		"accountNumber": account.Number,
+		"userNumber": user.Number,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

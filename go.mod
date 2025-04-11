@@ -1,4 +1,4 @@
-module github.com/pedro-scarelli/wheredidmymoneygo
+module github.com/pedro-scarelli/go_login
 
 go 1.24.1
 

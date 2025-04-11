@@ -1,4 +1,4 @@
-package accountservice
+package userservice
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 )
 
 func (service service) Delete(response http.ResponseWriter, request *http.Request) {
-	accountID, err := getID(request)
+	userID, err := getID(request)
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)
@@ -14,12 +14,12 @@ func (service service) Delete(response http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	err = service.usecase.Delete(accountID)
+	err = service.usecase.Delete(userID)
 	if err != nil {
 		response.WriteHeader(500)
 		response.Write([]byte(err.Error()))
 		return
 	}
 
-	json.NewEncoder(response).Encode(map[string]int{"deleted": accountID})
+	json.NewEncoder(response).Encode(map[string]int{"deleted": userID})
 }

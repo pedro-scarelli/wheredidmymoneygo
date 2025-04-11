@@ -1,7 +1,7 @@
-package accountusecase
+package userusecase
 
-func (usecase usecase) Delete(accountID int) error {
-	err := usecase.repository.Delete(accountID)
+func (usecase usecase) Delete(userID int) error {
+	err := usecase.repository.Delete(userID)
 	if err != nil {
 		return err
 	}

@@ -1,25 +1,25 @@
-package accountusecase
+package userusecase
 
 import (
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/security"
+	"github.com/pedro-scarelli/go_login/core/domain"
+	"github.com/pedro-scarelli/go_login/core/dto"
+	"github.com/pedro-scarelli/go_login/core/security"
 	"math/rand"
 	"time"
 )
 
-func (usecase usecase) Create(accountRequest *dto.CreateAccountRequest) (*domain.PublicAccount, error) {
-	hashedPassword, err := security.HashPassword(accountRequest.Password)
+func (usecase usecase) Create(userRequest *dto.CreateUserRequest) (*domain.PublicUser, error) {
+	hashedPassword, err := security.HashPassword(userRequest.Password)
 	if err != nil {
 		return nil, err
 	}
-	accountRequest.Password = hashedPassword
+	userRequest.Password = hashedPassword
 
-	publicAccount, err := usecase.repository.Create(accountRequest, rand.Intn(10000000), time.Now().UTC())
+	publicUser, err := usecase.repository.Create(userRequest, rand.Intn(10000000), time.Now().UTC())
 
 	if err != nil {
 		return nil, err
 	}
 
-	return publicAccount, nil
+	return publicUser, nil
 }

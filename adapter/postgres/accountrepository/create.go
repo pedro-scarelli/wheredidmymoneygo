@@ -1,55 +1,55 @@
-package accountrepository
+package userrepository
 
 import (
 	"context"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	"github.com/pedro-scarelli/go_login/core/domain"
+	"github.com/pedro-scarelli/go_login/core/dto"
 	"time"
 )
 
-func (repository repository) Create(accountRequest *dto.CreateAccountRequest, accountNumber int, createdAt time.Time) (*domain.PublicAccount, error) {
+func (repository repository) Create(userRequest *dto.CreateUserRequest, userNumber int, createdAt time.Time) (*domain.PublicUser, error) {
 	ctx := context.Background()
-	account := domain.Account{}
+	user := domain.User{}
 
 	err := repository.db.QueryRow(
 		ctx,
-		`INSERT INTO tb_account
+		`INSERT INTO tb_user
 		(st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, db_balance, dt_created_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		returning *`,
-		accountRequest.FirstName,
-		accountRequest.LastName,
-		accountRequest.CPF,
-		accountRequest.Email,
-		accountRequest.Password,
-		accountNumber,
+		userRequest.FirstName,
+		userRequest.LastName,
+		userRequest.CPF,
+		userRequest.Email,
+		userRequest.Password,
+		userNumber,
 		0,
 		createdAt,
 	).Scan(
-		&account.ID,
-		&account.FirstName,
-		&account.LastName,
-		&account.CPF,
-		&account.Email,
-		&account.Password,
-		&account.Number,
-		&account.Balance,
-		&account.CreatedAt,
+		&user.ID,
+		&user.FirstName,
+		&user.LastName,
+		&user.CPF,
+		&user.Email,
+		&user.Password,
+		&user.Number,
+		&user.Balance,
+		&user.CreatedAt,
 	)
 
 	if err != nil {
 		return nil, err
 	}
-	publicAccount := domain.PublicAccount{
-		ID:        account.ID,
-		FirstName: account.FirstName,
-		LastName:  account.LastName,
-		CPF:       account.CPF,
-		Email:     account.Email,
-		Number:    account.Number,
-		Balance:   account.Balance,
-		CreatedAt: account.CreatedAt,
+	publicUser := domain.PublicUser{
+		ID:        user.ID,
+		FirstName: user.FirstName,
+		LastName:  user.LastName,
+		CPF:       user.CPF,
+		Email:     user.Email,
+		Number:    user.Number,
+		Balance:   user.Balance,
+		CreatedAt: user.CreatedAt,
 	}
 
-	return &publicAccount, nil
+	return &publicUser, nil
 }

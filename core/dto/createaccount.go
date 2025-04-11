@@ -5,7 +5,7 @@ import (
 	"io"
 )
 
-type CreateAccountRequest struct {
+type CreateUserRequest struct {
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
 	CPF       string `json:"cpf"`
@@ -13,11 +13,11 @@ type CreateAccountRequest struct {
 	Password  string `json:"password"`
 }
 
-func FromJSONCreateAccountRequest(body io.Reader) (*CreateAccountRequest, error) {
-	createAccountRequest := CreateAccountRequest{}
-	if err := json.NewDecoder(body).Decode(&createAccountRequest); err != nil {
+func FromJSONCreateUserRequest(body io.Reader) (*CreateUserRequest, error) {
+	createUserRequest := CreateUserRequest{}
+	if err := json.NewDecoder(body).Decode(&createUserRequest); err != nil {
 		return nil, err
 	}
 
-	return &createAccountRequest, nil
+	return &createUserRequest, nil
 }

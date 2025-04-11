@@ -10,7 +10,7 @@ import (
 )
 
 type TransferRequest struct {
-	ToAccount int `json:"toAccount"`
+	ToUser int `json:"toUser"`
 	Amount    int `json:"amount"`
 }
 
@@ -19,7 +19,7 @@ type LoginRequest struct {
 	Password string `json:"password"`
 }
 
-type Account struct {
+type User struct {
 	ID        int       `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
@@ -31,7 +31,7 @@ type Account struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-type PublicAccount struct {
+type PublicUser struct {
 	ID        int       `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
@@ -42,18 +42,18 @@ type PublicAccount struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-func NewAccount(createAccountRequest *CreateAccountRequest) (*Account, error) {
-	hashedPassword, err := HashPassword(createAccountRequest.Password)
+func NewUser(createUserRequest *CreateUserRequest) (*User, error) {
+	hashedPassword, err := HashPassword(createUserRequest.Password)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &Account{
-		FirstName: createAccountRequest.FirstName,
-		LastName:  createAccountRequest.LastName,
-		CPF:       createAccountRequest.CPF,
-		Email:     createAccountRequest.Email,
+	return &User{
+		FirstName: createUserRequest.FirstName,
+		LastName:  createUserRequest.LastName,
+		CPF:       createUserRequest.CPF,
+		Email:     createUserRequest.Email,
 		Password:  hashedPassword,
 		Number:    int64(rand.Intn(10000000)),
 		CreatedAt: time.Now().UTC(),

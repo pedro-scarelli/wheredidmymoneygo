@@ -1,17 +1,17 @@
-package accountrepository
+package userrepository
 
 import (
 	"context"
 )
 
-func (repository repository) Delete(accountID int) error {
+func (repository repository) Delete(userID int) error {
 	ctx := context.Background()
 
 	_, err := repository.db.Exec(
 		ctx,
-		`DELETE FROM tb_account
+		`DELETE FROM tb_user
 		WHERE pt_it_id = $1`,
-		accountID)
+		userID)
 	if err != nil {
 		return err
 	}

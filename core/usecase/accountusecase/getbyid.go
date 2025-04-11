@@ -1,14 +1,14 @@
-package accountusecase
+package userusecase
 
 import (
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
+	"github.com/pedro-scarelli/go_login/core/domain"
 )
 
-func (usecase usecase) GetByID(accountID int) (*domain.Account, error) {
-	account, err := usecase.repository.GetByID(accountID)
+func (usecase usecase) GetByID(userID int) (*domain.User, error) {
+	user, err := usecase.repository.GetByID(userID)
 	if err != nil {
 		return nil, err
 	}
 
-	return account, nil
+	return user, nil
 }

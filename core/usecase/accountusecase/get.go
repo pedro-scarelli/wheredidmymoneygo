@@ -1,16 +1,16 @@
-package accountusecase
+package userusecase
 
 import (
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	"github.com/pedro-scarelli/go_login/core/domain"
+	"github.com/pedro-scarelli/go_login/core/dto"
 )
 
-func (usecase usecase) Get(paginationRequest *dto.PaginationRequestParms) (*domain.Pagination[[]domain.Account], error) {
-	accounts, err := usecase.repository.Get(paginationRequest)
+func (usecase usecase) Get(paginationRequest *dto.PaginationRequestParms) (*domain.Pagination[[]domain.User], error) {
+	users, err := usecase.repository.Get(paginationRequest)
 
 	if err != nil {
 		return nil, err
 	}
 
-	return accounts, nil
+	return users, nil
 }

@@ -1,12 +1,12 @@
-package accountservice
+package userservice
 
-import "github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
+import "github.com/pedro-scarelli/go_login/core/domain"
 
 type service struct {
-	usecase domain.AccountUseCase
+	usecase domain.UserUseCase
 }
 
-func New(usecase domain.AccountUseCase) domain.AccountService {
+func New(usecase domain.UserUseCase) domain.UserService {
 	return &service{
 		usecase: usecase,
 	}

@@ -8,12 +8,12 @@ import (
 )
 
 type Storage interface {
-	CreateAccount(*Account) error
-	DeleteAccount(int) error
-	UpdateAccount(*Account) error
-	GetAccounts() ([]*Account, error)
-	GetAccountByID(int) (*Account, error)
-	GetAccountByCPF(string) (*Account, error)
+	CreateUser(*User) error
+	DeleteUser(int) error
+	UpdateUser(*User) error
+	GetUsers() ([]*User, error)
+	GetUserByID(int) (*User, error)
+	GetUserByCPF(string) (*User, error)
 }
 
 type PostgresStore struct {
@@ -37,12 +37,12 @@ func NewPostgresStore() (*PostgresStore, error) {
 }
 
 func (s *PostgresStore) Init() error {
-	return s.createAccountTable()
+	return s.createUserTable()
 }
 
-func (s *PostgresStore) createAccountTable() error {
+func (s *PostgresStore) createUserTable() error {
 	query := `
-	create table if not exists tb_account (
+	create table if not exists tb_user (
 		pk_it_id serial primary key,
 		st_first_name varchar(50) not null,
 		st_last_name varchar(50) not null,
@@ -58,9 +58,9 @@ func (s *PostgresStore) createAccountTable() error {
 	return err
 }
 
-func (s *PostgresStore) CreateAccount(acc *Account) error {
+func (s *PostgresStore) CreateUser(acc *User) error {
 	query := `
-	insert into tb_account 
+	insert into tb_user 
 		(st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, db_balance, dt_created_at)
 	values 
 		($1, $2, $3, $4, $5, $6, $7, $8);`
@@ -85,30 +85,30 @@ func (s *PostgresStore) CreateAccount(acc *Account) error {
 	return nil
 }
 
-func (s *PostgresStore) UpdateAccount(*Account) error {
+func (s *PostgresStore) UpdateUser(*User) error {
 	return nil
 }
 
-func (s *PostgresStore) DeleteAccount(id int) error {
-	_, err := s.db.Query("delete from tb_account where pk_it_id = $1", id)
+func (s *PostgresStore) DeleteUser(id int) error {
+	_, err := s.db.Query("delete from tb_user where pk_it_id = $1", id)
 	return err
 }
 
-func (s *PostgresStore) GetAccountByID(id int) (*Account, error) {
-	rows, err := s.db.Query("select pk_it_id, st_first_name, st_last_name, st_cpf, st_email, it_number, db_balance, dt_created_at from tb_account where pk_it_id = $1", id)
+func (s *PostgresStore) GetUserByID(id int) (*User, error) {
+	rows, err := s.db.Query("select pk_it_id, st_first_name, st_last_name, st_cpf, st_email, it_number, db_balance, dt_created_at from tb_user where pk_it_id = $1", id)
 	if err != nil {
 		return nil, err
 	}
 
 	for rows.Next() {
-		return scanIntoAccount(rows)
+		return scanIntoUser(rows)
 	}
 
-	return nil, fmt.Errorf("account %d not found", id)
+	return nil, fmt.Errorf("user %d not found", id)
 }
 
-func (s *PostgresStore) GetAccountByCPF(cpf string) (*Account, error) {
-	rows, err := s.db.Query("select st_cpf, st_password from tb_account where st_cpf = $1", cpf)
+func (s *PostgresStore) GetUserByCPF(cpf string) (*User, error) {
+	rows, err := s.db.Query("select st_cpf, st_password from tb_user where st_cpf = $1", cpf)
 	if err != nil {
 		return nil, err
 	}
@@ -116,48 +116,48 @@ func (s *PostgresStore) GetAccountByCPF(cpf string) (*Account, error) {
 		return scanIntoLogin(rows)
 	}
 
-	return nil, fmt.Errorf("account %s not found", cpf)
+	return nil, fmt.Errorf("user %s not found", cpf)
 }
 
-func (s *PostgresStore) GetAccounts() ([]*Account, error) {
-	rows, err := s.db.Query("select * from tb_account;")
+func (s *PostgresStore) GetUsers() ([]*User, error) {
+	rows, err := s.db.Query("select * from tb_user;")
 	if err != nil {
 		return nil, err
 	}
 
-	accounts := []*PublicAccount{}
+	users := []*PublicUser{}
 	for rows.Next() {
-		account, err := scanIntoAccount(rows)
+		user, err := scanIntoUser(rows)
 		if err != nil {
 			return nil, err
 		}
-		accounts = append(accounts, account)
+		users = append(users, user)
 	}
 
-	return accounts, nil
+	return users, nil
 }
 
-func scanIntoLogin(rows *sql.Rows) (*Account, error) {
-	account := new(Account)
+func scanIntoLogin(rows *sql.Rows) (*User, error) {
+	user := new(User)
 	err := rows.Scan(
-		&account.CPF,
-		&account.Password,
+		&user.CPF,
+		&user.Password,
 	)
 
-	return account, err
+	return user, err
 }
 
-func scanIntoAccount(rows *sql.Rows) (*PublicAccount, error) {
-	account := new(PublicAccount)
+func scanIntoUser(rows *sql.Rows) (*PublicUser, error) {
+	user := new(PublicUser)
 	err := rows.Scan(
-		&account.ID,
-		&account.FirstName,
-		&account.LastName,
-		&account.CPF,
-		&account.Email,
-		&account.Number,
-		&account.Balance,
-		&account.CreatedAt)
+		&user.ID,
+		&user.FirstName,
+		&user.LastName,
+		&user.CPF,
+		&user.Email,
+		&user.Number,
+		&user.Balance,
+		&user.CreatedAt)
 
-	return account, err
+	return user, err
 }
