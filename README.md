@@ -61,7 +61,7 @@ Content-Type: application/json
 {
   "firstName": "Pedro",
   "lastName": "Scarelli",
-  "cpf": "10823027910",
+  "cpf": "{CPF_DO_USUARIO}",
   "email": "pvscarelli@gmail.com",
   "password": "Testee#1"
 }
