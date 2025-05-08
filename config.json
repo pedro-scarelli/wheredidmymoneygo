@@ -1,8 +1,0 @@
-{
-  "database": {
-    "url": "://scarelli:neymardemoicano2011@gobank-db:5432/db_gobank"
-  },
-  "server": {
-    "port": "3000"
-  }
-}

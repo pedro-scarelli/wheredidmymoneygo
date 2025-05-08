@@ -10,7 +10,6 @@ import (
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/spf13/viper"
 
 	_ "github.com/golang-migrate/migrate/v4/database/pgx"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -35,9 +34,7 @@ type PoolInterface interface {
 }
 
 func GetConnection(context context.Context) *pgxpool.Pool {
-	databaseURL := viper.GetString("database.url")
-
-	conn, err := pgxpool.Connect(context, "postgres"+databaseURL)
+	conn, err := pgxpool.Connect(context, "postgres"+dbURLFromEnv())
 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
@@ -48,8 +45,7 @@ func GetConnection(context context.Context) *pgxpool.Pool {
 }
 
 func RunMigrations() {
-	databaseURL := viper.GetString("database.url")
-	m, err := migrate.New("file://database/migrations", "pgx"+databaseURL)
+	m, err := migrate.New("file://database/migrations", "pgx"+dbURLFromEnv())
 	if err != nil {
 		log.Println(err)
 	}
@@ -57,4 +53,17 @@ func RunMigrations() {
 	if err := m.Up(); err != nil {
 		log.Println(err)
 	}
+}
+
+func dbURLFromEnv() string {
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
+	account := os.Getenv("DB_USER")
+	password := os.Getenv("DB_PASSWORD")
+	name := os.Getenv("DB_NAME")
+
+	return fmt.Sprintf(
+		"://%s:%s@%s:%s/%s?sslmode=disable",
+		account, password, host, port, name,
+	)
 }

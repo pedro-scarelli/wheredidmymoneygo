@@ -1,4 +1,4 @@
-package userservice
+package accountservice
 
 import (
 	"fmt"

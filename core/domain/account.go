@@ -3,11 +3,11 @@ package domain
 import (
 	"net/http"
 
-	"github.com/pedro-scarelli/go_login/core/dto"
+	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
 	"time"
 )
 
-type PublicUser struct {
+type PublicAccount struct {
 	ID        int       `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
@@ -18,7 +18,7 @@ type PublicUser struct {
 	CreatedAt time.Time `json:"createdAt"`
 }
 
-type User struct {
+type Account struct {
 	ID        int       `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
@@ -31,7 +31,7 @@ type User struct {
 	DeletedAt time.Time `json:"deletedAt"`
 }
 
-type UserService interface {
+type AccountService interface {
 	Create(response http.ResponseWriter, request *http.Request)
 	Delete(response http.ResponseWriter, request *http.Request)
 	Update(response http.ResponseWriter, request *http.Request)
@@ -39,18 +39,18 @@ type UserService interface {
 	GetByID(response http.ResponseWriter, request *http.Request)
 }
 
-type UserUseCase interface {
-	Create(userRequest *dto.CreateUserRequest) (*PublicUser, error)
-	Delete(userID int) error
-	Update(userRequest *dto.CreateUserRequest) (*PublicUser, error)
-	Get(paginationRequest *dto.PaginationRequestParms) (*Pagination[[]User], error)
-	GetByID(userID int) (*User, error)
+type AccountUseCase interface {
+	Create(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
+	Delete(accountID int) error
+	Update(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
+	Get(paginationRequest *dto.PaginationRequestParms) (*Pagination[[]Account], error)
+	GetByID(accountID int) (*Account, error)
 }
 
-type UserRepository interface {
-	Create(userRequest *dto.CreateUserRequest, userNumber int, createdAt time.Time) (*PublicUser, error)
-	Delete(userID int) error
-	Update(userRequest *dto.CreateUserRequest) (*PublicUser, error)
-	Get(paginationRequestParams *dto.PaginationRequestParms) (*Pagination[[]User], error)
-	GetByID(userID int) (*User, error)
+type AccountRepository interface {
+	Create(accountRequest *dto.CreateAccountRequest, accountNumber int, createdAt time.Time) (*PublicAccount, error)
+	Delete(accountID int) error
+	Update(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
+	Get(paginationRequestParams *dto.PaginationRequestParms) (*Pagination[[]Account], error)
+	GetByID(accountID int) (*Account, error)
 }

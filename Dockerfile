@@ -6,7 +6,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o go-api /adapter/h
 FROM scratch
 WORKDIR /
 COPY --from=builder /go-api .
-COPY --from=builder /config.json .
 COPY --from=builder /database/migrations /database/migrations
 EXPOSE 3000
 CMD ["./go-api"]

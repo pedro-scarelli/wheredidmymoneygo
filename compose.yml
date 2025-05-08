@@ -2,11 +2,12 @@ services:
   backend:
     build:
       context: .
-      dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    env_file:
+      - .env
     environment:
-      - NODE_ENV=development
+      - DB_HOST=database
     depends_on:
       - database
 

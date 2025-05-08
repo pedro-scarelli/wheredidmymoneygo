@@ -1,22 +1,22 @@
-package userrepository
+package accountrepository
 
 import (
 	"context"
 
 	"github.com/booscaaa/go-paginate/paginate"
-	"github.com/pedro-scarelli/go_login/core/domain"
-	"github.com/pedro-scarelli/go_login/core/dto"
+	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
+	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
 )
 
-func (repository repository) Get(pagination *dto.PaginationRequestParms) (*domain.Pagination[[]domain.User], error) {
+func (repository repository) Get(pagination *dto.PaginationRequestParms) (*domain.Pagination[[]domain.Account], error) {
 	ctx := context.Background()
-	users := []domain.User{}
+	accounts := []domain.Account{}
 	total := int32(0)
 	pagin := paginate.Instance(pagination)
 	query, queryCount := pagin.
 		Query(`
 		SELECT pk_it_id, st_first_name, st_last_name, st_cpf, st_email, it_number, db_balance, dt_created_at 
-		FROM tb_user`,
+		FROM tb_account`,
 		).
 		Sort(pagination.Sort).
 		Desc(pagination.Descending).
@@ -36,20 +36,20 @@ func (repository repository) Get(pagination *dto.PaginationRequestParms) (*domai
 		}
 
 		for rows.Next() {
-			user := domain.User{}
+			account := domain.Account{}
 
 			rows.Scan(
-				&user.ID,
-				&user.FirstName,
-				&user.LastName,
-				&user.CPF,
-				&user.Email,
-				&user.Number,
-				&user.Balance,
-				&user.CreatedAt,
+				&account.ID,
+				&account.FirstName,
+				&account.LastName,
+				&account.CPF,
+				&account.Email,
+				&account.Number,
+				&account.Balance,
+				&account.CreatedAt,
 			)
 
-			users = append(users, user)
+			accounts = append(accounts, account)
 		}
 	}
 
@@ -61,8 +61,8 @@ func (repository repository) Get(pagination *dto.PaginationRequestParms) (*domai
 		}
 	}
 
-	return &domain.Pagination[[]domain.User]{
-		Items: users,
+	return &domain.Pagination[[]domain.Account]{
+		Items: accounts,
 		Total: total,
 	}, nil
 }

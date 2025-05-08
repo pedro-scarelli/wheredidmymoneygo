@@ -1,14 +1,14 @@
-package userservice
+package accountservice
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pedro-scarelli/go_login/core/dto"
+	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
 )
 
 func (service service) Update(response http.ResponseWriter, request *http.Request) {
-	userRequest, err := dto.FromJSONCreateUserRequest(request.Body)
+	accountRequest, err := dto.FromJSONCreateAccountRequest(request.Body)
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)
@@ -16,7 +16,7 @@ func (service service) Update(response http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	user, err := service.usecase.Create(userRequest)
+	account, err := service.usecase.Create(accountRequest)
 
 	if err != nil {
 		response.WriteHeader(500)
@@ -24,5 +24,5 @@ func (service service) Update(response http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	json.NewEncoder(response).Encode(user)
+	json.NewEncoder(response).Encode(account)
 }
