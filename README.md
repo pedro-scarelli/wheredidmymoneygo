@@ -15,11 +15,14 @@
 
 ## Configuração e Instalação
 
-    Clone o repositório
-
+Clone o repositório
+```bash
 git clone https://github.com/pedro-scarelli/wheredidmymoneygo.git
+```
+Navegue até a raiz do projeto
+```bash
 cd wheredidmymoneygo
-
+```
 ## Instale dependências
 
     go mod download
