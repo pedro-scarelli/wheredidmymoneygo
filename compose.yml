@@ -8,14 +8,14 @@ services:
     environment:
       - NODE_ENV=development
     depends_on:
-      - gobank-db
+      - database
 
-  gobank-db:
+  database:
     image: postgres:15
     environment:
-      POSTGRES_USER: scarelli
-      POSTGRES_PASSWORD: neymardemoicano2011
-      POSTGRES_DB: db_gobank
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
       - "5432:5432"
     volumes:
