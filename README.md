@@ -13,6 +13,14 @@
 
     📊 Planejado: CRUD de lançamentos de despesas, categorização, relatórios mensais
 
+
+## 📦 Pré-requisitos
+
+- Docker
+- Docker Compose
+- Git
+
+  
 ## Configuração e Instalação
 
 Clone o repositório
@@ -23,17 +31,12 @@ Navegue até a raiz do projeto
 ```bash
 cd wheredidmymoneygo
 ```
-## Instale dependências
-
-    go mod download
-
-    Configure o ambiente
-    Crie um arquivo .env na raiz do projeto (veja Variáveis de Ambiente abaixo).
 
 ## Executando o Servidor
 
-### com hot reload (se usar Air / Fresh / Reflex)
-air
+```bash
+docker compose up -d
+```
 
 ### ou simplesmente:
 go run cmd/server/main.go
