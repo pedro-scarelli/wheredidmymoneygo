@@ -40,14 +40,7 @@ docker compose up -d
 
 Endpoints da API
 
-Todos os endpoints assumem http://localhost:3000
-Conta
-Método	Rota	Auth	Descrição
-GET	/account	Sem auth	Lista todas as contas
-GET	/account/{id}	Bearer JWT	Detalha conta pelo ID
-POST	/account	Sem auth	Cria uma nova conta de usuário
-DELETE	/account/{id}	Sem auth	Deleta conta (sem proteção ainda)
-Exemplo: Criar Conta
+URL base: http://localhost:3000
 
 POST /account HTTP/1.1
 Content-Type: application/json
