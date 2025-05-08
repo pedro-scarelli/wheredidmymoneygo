@@ -38,21 +38,9 @@ cd wheredidmymoneygo
 docker compose up -d
 ```
 
-### ou simplesmente:
-go run cmd/server/main.go
-
-Por padrão, a API escuta na porta 3000.
-Variáveis de Ambiente
-
-## Crie um .env com pelo menos:
-
-PORT=3000
-JWT_SECRET=sua_chave_secreta_jwt
-DB_DSN="usuario=... senha=... host=... dbname=... port=..."
-
 Endpoints da API
 
-Todos os endpoints assumem http://localhost:3000 a menos que a variável PORT seja alterada.
+Todos os endpoints assumem http://localhost:3000
 Conta
 Método	Rota	Auth	Descrição
 GET	/account	Sem auth	Lista todas as contas
