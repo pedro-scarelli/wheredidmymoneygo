@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -19,6 +21,7 @@ type PublicAccount struct {
 }
 
 type Account struct {
+	gorm.Model
 	ID        int       `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`

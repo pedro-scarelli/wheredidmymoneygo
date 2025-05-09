@@ -21,9 +21,9 @@ func main() {
 
 	router := mux.NewRouter()
 	router.Handle("/account", http.HandlerFunc(accountService.Create)).Methods("POST")
+	router.Handle("/account", http.HandlerFunc(accountService.Update)).Methods("PATCH")
 	router.Handle("/account", http.HandlerFunc(accountService.Get)).Methods("GET")
 	router.Handle("/account/{id}", http.HandlerFunc(accountService.GetByID)).Methods("GET")
-	router.Handle("/account/{id}", http.HandlerFunc(accountService.Update)).Methods("PATCH")
 	router.Handle("/account/{id}", http.HandlerFunc(accountService.Delete)).Methods("DELETE")
 
 	port := os.Getenv("API_PORT")
