@@ -1,11 +1,14 @@
 FROM golang:1.24.2-bookworm as builder
-WORKDIR /
+
+WORKDIR /app
+COPY go.mod go.sum ./
+RUN go mod download
+
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o go-api /adapter/http/main.go
+RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -o go-api ./adapter/http/main.go
 
 FROM scratch
-WORKDIR /
-COPY --from=builder /go-api .
-COPY --from=builder /database/migrations /database/migrations
+COPY --from=builder /app/go-api /
+COPY --from=builder /app/database/migrations /database/migrations
 EXPOSE 3000
-CMD ["./go-api"]
+CMD ["/go-api"]

@@ -10,7 +10,7 @@ func (repository repository) GetByID(accountID int) (*domain.Account, error) {
 	ctx := context.Background()
 	row := repository.db.QueryRow(ctx,
 		`select 
-		pk_it_id, st_first_name, st_last_name, st_cpf, st_email, it_number, db_balance, dt_created_at
+		pk_it_id, st_first_name, st_last_name, st_cpf, st_email, it_number, it_balance, dt_created_at
 		from tb_account
 		where pk_it_id = $1`,
 		accountID)

@@ -5,7 +5,7 @@ import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
 )
 
-func (usecase usecase) Get(paginationRequest *dto.PaginationRequestParms) (*domain.Pagination[[]domain.Account], error) {
+func (usecase usecase) Get(paginationRequest *dto.PaginationRequestParams) (*domain.Pagination[[]domain.Account], error) {
 	accounts, err := usecase.repository.Get(paginationRequest)
 
 	if err != nil {

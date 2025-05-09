@@ -14,7 +14,7 @@ type PublicAccount struct {
 	Number    int64     `json:"number"`
 	CPF       string    `json:"cpf"`
 	Email     string    `json:"email"`
-	Balance   float64   `json:"balance"`
+	Balance   int64     `json:"balance"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
@@ -26,7 +26,7 @@ type Account struct {
 	CPF       string    `json:"cpf"`
 	Email     string    `json:"email"`
 	Password  string    `json:"password"`
-	Balance   float64   `json:"balance"`
+	Balance   int64     `json:"balance"`
 	CreatedAt time.Time `json:"createdAt"`
 	DeletedAt time.Time `json:"deletedAt"`
 }
@@ -43,7 +43,7 @@ type AccountUseCase interface {
 	Create(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
 	Delete(accountID int) error
 	Update(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
-	Get(paginationRequest *dto.PaginationRequestParms) (*Pagination[[]Account], error)
+	Get(paginationRequest *dto.PaginationRequestParams) (*Pagination[[]Account], error)
 	GetByID(accountID int) (*Account, error)
 }
 
@@ -51,6 +51,6 @@ type AccountRepository interface {
 	Create(accountRequest *dto.CreateAccountRequest, accountNumber int, createdAt time.Time) (*PublicAccount, error)
 	Delete(accountID int) error
 	Update(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
-	Get(paginationRequestParams *dto.PaginationRequestParms) (*Pagination[[]Account], error)
+	Get(paginationRequestParams *dto.PaginationRequestParams) (*Pagination[[]Account], error)
 	GetByID(accountID int) (*Account, error)
 }

@@ -3,28 +3,29 @@ package dto
 import (
 	"net/http"
 	"strconv"
-	"strings"
 )
 
-type PaginationRequestParms struct {
-	Search       string   `json:"search"`
-	Descending   []string `json:"descending"`
-	Page         int      `json:"page"`
-	ItemsPerPage int      `json:"itemsPerPage"`
-	Sort         []string `json:"sort"`
+type PaginationRequestParams struct {
+	Page         int `form:"page"`
+	ItemsPerPage int `form:"itemsPerPage"`
 }
 
-func FromValuePaginationRequestParams(request *http.Request) (*PaginationRequestParms, error) {
-	page, _ := strconv.Atoi(request.FormValue("page"))
-	itemsPerPage, _ := strconv.Atoi(request.FormValue("itemsPerPage"))
+func FromValuePaginationRequestParams(request *http.Request) (*PaginationRequestParams, error) {
+	query := request.URL.Query()
 
-	paginationRequestParms := PaginationRequestParms{
-		Search:       request.FormValue("search"),
-		Descending:   strings.Split(request.FormValue("descending"), ","),
-		Sort:         strings.Split(request.FormValue("sort"), ","),
-		Page:         page,
-		ItemsPerPage: itemsPerPage,
+	page, _ := strconv.Atoi(query.Get("page"))
+	if page < 1 {
+		page = 1
 	}
 
-	return &paginationRequestParms, nil
+	itemsPerPage, _ := strconv.Atoi(query.Get("itemsPerPage"))
+	if itemsPerPage < 1 {
+		itemsPerPage = 10
+	}
+
+	return &PaginationRequestParams{
+		Page:         page,
+		ItemsPerPage: itemsPerPage,
+	}, nil
+
 }

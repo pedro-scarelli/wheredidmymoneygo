@@ -14,7 +14,7 @@ func (repository repository) Update(accountRequest *dto.CreateAccountRequest) (*
 	err := repository.db.QueryRow(
 		ctx,
 		`INSERT INTO tb_account
-		(st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, db_balance, dt_created_at)
+		(st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, it_balance, dt_created_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		returning *`,
 		accountRequest.FirstName,
