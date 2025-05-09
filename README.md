@@ -10,8 +10,6 @@
 
     🔐 Login baseado em JWT e rotas protegidas
 
-    ➡️ Transferência entre contas
-
     📊 Planejado: CRUD de lançamentos de despesas, categorização, relatórios mensais
 
 ## 📦 Pré-requisitos
@@ -73,18 +71,4 @@ Retorno de sucesso:
 
 {
 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…"
-}
-
-## Transferência
-
-Método Rota Auth Descrição
-POST /transfer Sem auth Transfere valor para outra conta
-Exemplo: Transferência
-
-POST /transfer HTTP/1.1
-Content-Type: application/json
-
-{
-"toAccount": 4187503,
-"amount": 131234
 }
