@@ -42,15 +42,15 @@ type AccountService interface {
 type AccountUseCase interface {
 	Create(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
 	Delete(accountID int) error
-	Update(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
-	Get(paginationRequest *dto.PaginationRequestParams) (*Pagination[[]Account], error)
-	GetByID(accountID int) (*Account, error)
+	Update(accountRequest *dto.UpdateAccountRequest) (*PublicAccount, error)
+	Get(paginationRequest *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
+	GetByID(accountID int) (*PublicAccount, error)
 }
 
 type AccountRepository interface {
 	Create(accountRequest *dto.CreateAccountRequest, accountNumber int, createdAt time.Time) (*PublicAccount, error)
 	Delete(accountID int) error
-	Update(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
-	Get(paginationRequestParams *dto.PaginationRequestParams) (*Pagination[[]Account], error)
-	GetByID(accountID int) (*Account, error)
+	Update(accountRequest *dto.UpdateAccountRequest) (*PublicAccount, error)
+	Get(paginationRequestParams *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
+	GetByID(accountID int) (*PublicAccount, error)
 }

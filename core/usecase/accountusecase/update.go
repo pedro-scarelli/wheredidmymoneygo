@@ -4,18 +4,18 @@ import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/security"
-	"math/rand"
-	"time"
 )
 
-func (usecase usecase) Update(accountRequest *dto.CreateAccountRequest) (*domain.PublicAccount, error) {
-	hashedPassword, err := security.HashPassword(accountRequest.Password)
-	if err != nil {
-		return nil, err
+func (usecase usecase) Update(updateAccountRequest *dto.UpdateAccountRequest) (*domain.PublicAccount, error) {
+	if updateAccountRequest.Password != nil {
+		hashedPassword, err := security.HashPassword(*updateAccountRequest.Password)
+		if err != nil {
+			return nil, err
+		}
+		updateAccountRequest.Password = &hashedPassword
 	}
-	accountRequest.Password = hashedPassword
 
-	account, err := usecase.repository.Create(accountRequest, rand.Intn(10000000), time.Now().UTC())
+	account, err := usecase.repository.Update(updateAccountRequest)
 
 	if err != nil {
 		return nil, err

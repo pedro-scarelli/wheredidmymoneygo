@@ -2,21 +2,17 @@ package accountrepository
 
 import (
 	"context"
-	"fmt"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
-	"strconv"
 )
 
-func (repository repository) Get(paginationRequestDTO *dto.PaginationRequestParams) (*domain.Pagination[[]domain.Account], error) {
+func (repository repository) Get(paginationRequestDTO *dto.PaginationRequestParams) (*domain.Pagination[[]domain.PublicAccount], error) {
 	ctx := context.Background()
 	page := paginationRequestDTO.Page
 	itemsPerPage := paginationRequestDTO.ItemsPerPage
 
 	offset := (page - 1) * itemsPerPage
 
-	fmt.Printf("page: %v\n", strconv.Itoa(page))
-	fmt.Printf("items: %v\n", strconv.Itoa(itemsPerPage))
 	query := `
         SELECT
             pk_it_id, st_first_name, st_last_name, st_cpf, st_email,
@@ -32,10 +28,10 @@ func (repository repository) Get(paginationRequestDTO *dto.PaginationRequestPara
 	}
 	defer rows.Close()
 
-	var accounts []domain.Account
+	var accounts []domain.PublicAccount
 	var totalCount int32
 	for rows.Next() {
-		var acc domain.Account
+		var acc domain.PublicAccount
 		err := rows.Scan(
 			&acc.ID,
 			&acc.FirstName,
@@ -53,9 +49,8 @@ func (repository repository) Get(paginationRequestDTO *dto.PaginationRequestPara
 		accounts = append(accounts, acc)
 	}
 
-	return &domain.Pagination[[]domain.Account]{
-		Total:      totalCount,
-		TotalItems: int32(len(accounts)),
+	return &domain.Pagination[[]domain.PublicAccount]{
+		TotalItems: totalCount,
 		Page:       int32(page),
 		Data:       accounts,
 	}, nil

@@ -6,7 +6,7 @@ import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 )
 
-func (repository repository) GetByID(accountID int) (*domain.Account, error) {
+func (repository repository) GetByID(accountID int) (*domain.PublicAccount, error) {
 	ctx := context.Background()
 	row := repository.db.QueryRow(ctx,
 		`select 
@@ -18,8 +18,8 @@ func (repository repository) GetByID(accountID int) (*domain.Account, error) {
 	return scanIntoAccount(row)
 }
 
-func scanIntoAccount(row pgx.Row) (*domain.Account, error) {
-	account := new(domain.Account)
+func scanIntoAccount(row pgx.Row) (*domain.PublicAccount, error) {
+	account := new(domain.PublicAccount)
 	err := row.Scan(
 		&account.ID,
 		&account.FirstName,
