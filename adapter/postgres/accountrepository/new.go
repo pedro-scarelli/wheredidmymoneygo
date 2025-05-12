@@ -1,15 +1,15 @@
 package accountrepository
 
 import (
-	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/postgres"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
+	"gorm.io/gorm"
 )
 
 type repository struct {
-	db postgres.PoolInterface
+	db *gorm.DB
 }
 
-func New(db postgres.PoolInterface) domain.AccountRepository {
+func New(db *gorm.DB) domain.AccountRepository {
 	return &repository{
 		db: db,
 	}
