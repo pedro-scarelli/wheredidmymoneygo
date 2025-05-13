@@ -4,8 +4,6 @@ import (
 	"net/http"
 
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -21,7 +19,6 @@ type PublicAccount struct {
 }
 
 type Account struct {
-	gorm.Model
 	ID        int       `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
@@ -55,5 +52,5 @@ type AccountRepository interface {
 	Delete(accountID int) error
 	Update(accountRequest *dto.UpdateAccountRequest) (*PublicAccount, error)
 	Get(paginationRequestParams *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
-	GetByID(accountID int) (*PublicAccount, error)
+	GetByID(accountID int) (*Account, error)
 }

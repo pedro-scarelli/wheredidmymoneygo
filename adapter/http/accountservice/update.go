@@ -8,7 +8,7 @@ import (
 )
 
 func (service service) Update(response http.ResponseWriter, request *http.Request) {
-	accountRequest, err := dto.FromJSONCreateAccountRequest(request.Body)
+	accountRequest, err := dto.FromJSONUpdateAccountRequest(request.Body)
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)
@@ -16,7 +16,7 @@ func (service service) Update(response http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	account, err := service.usecase.Create(accountRequest)
+	account, err := service.usecase.Update(accountRequest)
 
 	if err != nil {
 		response.WriteHeader(500)

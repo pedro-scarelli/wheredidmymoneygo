@@ -10,5 +10,16 @@ func (usecase usecase) GetByID(accountID int) (*domain.PublicAccount, error) {
 		return nil, err
 	}
 
-	return account, nil
+	publicAccount := &domain.PublicAccount{
+		ID:        account.ID,
+		FirstName: account.FirstName,
+		LastName:  account.LastName,
+		Number:    account.Number,
+		CPF:       account.CPF,
+		Email:     account.Email,
+		Balance:   account.Balance,
+		CreatedAt: account.CreatedAt,
+	}
+
+	return publicAccount, nil
 }
