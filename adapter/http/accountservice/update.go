@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 )
 
 func (service service) Update(response http.ResponseWriter, request *http.Request) {
-	accountRequest, err := dto.FromJSONUpdateAccountRequest(request.Body)
+	accountRequest, err := dto.FromJSONUpdateAccountRequestDTO(request.Body)
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)

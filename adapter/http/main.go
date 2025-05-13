@@ -3,12 +3,13 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/gorilla/mux"
-	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/postgres"
-	"github.com/pedro-scarelli/wheredidmymoneygo/di"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/gorilla/mux"
+	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/postgres"
+	"github.com/pedro-scarelli/wheredidmymoneygo/di"
 )
 
 func main() {
@@ -18,6 +19,7 @@ func main() {
 
 	postgres.RunMigrations()
 	accountService := di.ConfigAccountDI(conn)
+	authenticationService := di.ConfigAuthenticationDI(conn)
 
 	router := mux.NewRouter()
 	router.Handle("/account", http.HandlerFunc(accountService.Create)).Methods("POST")
@@ -26,7 +28,7 @@ func main() {
 	router.Handle("/account/{id}", http.HandlerFunc(accountService.GetByID)).Methods("GET")
 	router.Handle("/account/{id}", http.HandlerFunc(accountService.Delete)).Methods("DELETE")
 
-	router.Handle("/login", http.HandlerFunc(authService.Login)).Methods("POST")
+	router.Handle("/login", http.HandlerFunc(authenticationService.Login)).Methods("POST")
 
 	port := os.Getenv("API_PORT")
 	log.Printf("LISTEN ON PORT: %v", port)

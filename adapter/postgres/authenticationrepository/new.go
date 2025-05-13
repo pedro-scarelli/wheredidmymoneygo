@@ -1,4 +1,4 @@
-package accountrepository
+package authenticationrepository
 
 import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/postgres"
@@ -9,7 +9,7 @@ type repository struct {
 	db postgres.PoolInterface
 }
 
-func New(db postgres.PoolInterface) domain.AccountRepository {
+func New(db postgres.PoolInterface) domain.AuthenticationRepository {
 	return &repository{
 		db: db,
 	}

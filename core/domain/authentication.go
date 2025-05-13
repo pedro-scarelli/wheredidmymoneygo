@@ -3,17 +3,18 @@ package domain
 import (
 	"net/http"
 
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	requestDto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/authentication/request"
+	responseDto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/authentication/response"
 )
 
-type AuthenticationtService interface {
+type AuthenticationService interface {
 	Login(response http.ResponseWriter, request *http.Request)
 }
 
-type AuthenticationtUseCase interface {
-	Login(accountRequest *dto.LoginRequestDTO) (*LoginResponseDTO, error)
+type AuthenticationUseCase interface {
+	Login(accountRequest *requestDto.LoginRequestDTO) (*responseDto.LoginResponseDTO, error)
 }
 
-type AuthenticationtRepository interface {
-	Login(accountRequest *dto.LoginRequestDTO) (*PublicAccount, error)
+type AuthenticationRepository interface {
+	Login() (error)
 }

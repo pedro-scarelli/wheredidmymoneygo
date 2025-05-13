@@ -2,20 +2,20 @@ package accountusecase
 
 import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/security"
 )
 
-func (usecase usecase) Update(updateAccountRequest *dto.UpdateAccountRequest) (*domain.PublicAccount, error) {
-	if updateAccountRequest.Password != nil {
-		hashedPassword, err := security.HashPassword(*updateAccountRequest.Password)
+func (usecase usecase) Update(updateAccountRequestDto *dto.UpdateAccountRequestDTO) (*domain.PublicAccount, error) {
+	if updateAccountRequestDto.Password != nil {
+		hashedPassword, err := security.HashPassword(*updateAccountRequestDto.Password)
 		if err != nil {
 			return nil, err
 		}
-		updateAccountRequest.Password = &hashedPassword
+		updateAccountRequestDto.Password = &hashedPassword
 	}
 
-	account, err := usecase.repository.Update(updateAccountRequest)
+	account, err := usecase.repository.Update(updateAccountRequestDto)
 
 	if err != nil {
 		return nil, err

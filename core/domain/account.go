@@ -3,8 +3,10 @@ package domain
 import (
 	"net/http"
 
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
 	"time"
+
+	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	accountRequestDto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 )
 
 type PublicAccount struct {
@@ -40,17 +42,17 @@ type AccountService interface {
 }
 
 type AccountUseCase interface {
-	Create(accountRequest *dto.CreateAccountRequest) (*PublicAccount, error)
+	Create(accountRequest *accountRequestDto.CreateAccountRequestDTO) (*PublicAccount, error)
 	Delete(accountID int) error
-	Update(accountRequest *dto.UpdateAccountRequest) (*PublicAccount, error)
+	Update(accountRequest *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
 	Get(paginationRequest *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
 	GetByID(accountID int) (*PublicAccount, error)
 }
 
 type AccountRepository interface {
-	Create(accountRequest *dto.CreateAccountRequest, accountNumber int, createdAt time.Time) (*PublicAccount, error)
+	Create(accountRequest *accountRequestDto.CreateAccountRequestDTO, accountNumber int, createdAt time.Time) (*PublicAccount, error)
 	Delete(accountID int) error
-	Update(accountRequest *dto.UpdateAccountRequest) (*PublicAccount, error)
+	Update(accountRequest *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
 	Get(paginationRequestParams *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
 	GetByID(accountID int) (*Account, error)
 }

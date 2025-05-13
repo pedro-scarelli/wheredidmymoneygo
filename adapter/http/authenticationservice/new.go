@@ -1,4 +1,4 @@
-package authservice
+package authenticationservice
 
 import "github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 

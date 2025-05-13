@@ -6,34 +6,41 @@ import (
 
 	"dario.cat/mergo"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 )
 
-func (repository repository) Update(updateAccountRequest *dto.UpdateAccountRequest) (*domain.PublicAccount, error) {
-	account, err := repository.GetByID(int(updateAccountRequest.ID))
+func (repository repository) Update(updateAccountRequestDto *dto.UpdateAccountRequestDTO) (*domain.PublicAccount, error) {
+	account, err := repository.GetByID(int(updateAccountRequestDto.ID))
 	if err != nil {
-		return nil, fmt.Errorf("Conta não encontrada")
+		return nil, fmt.Errorf("conta não encontrada")
 	}
 
 	updateData := &domain.Account{
-		ID:        updateAccountRequest.ID,
-		FirstName: updateAccountRequest.FirstName,
-		LastName:  updateAccountRequest.LastName,
+		ID:        updateAccountRequestDto.ID,
 		Number:    account.Number,
 		CPF:       account.CPF,
 		Email:     account.Email,
-		Password:  updateAccountRequest.Password,
 		Balance:   account.Balance,
 		CreatedAt: account.CreatedAt,
 		DeletedAt: account.DeletedAt,
 	}
 
-	err = mergo.MergeWithOverwrite(account, updateData)
-	if err != nil {
-		return nil, fmt.Errorf("Erro ao mapear propiedades: %v", err)
+    if updateAccountRequestDto.FirstName != nil {
+        updateData.FirstName = *updateAccountRequestDto.FirstName
+    }
+    if updateAccountRequestDto.LastName != nil {
+        updateData.LastName = *updateAccountRequestDto.LastName
+    }
+    if updateAccountRequestDto.Password != nil {
+        updateData.Password = *updateAccountRequestDto.Password
 	}
 
-	fmt.Printf("ID da conta pra ser atualizada: %v", updateAccountRequest.ID)
+	err = mergo.MergeWithOverwrite(account, updateData)
+	if err != nil {
+		return nil, fmt.Errorf("erro ao mapear propiedades: %v", err)
+	}
+
+	fmt.Printf("ID da conta pra ser atualizada: %v", updateAccountRequestDto.ID)
 	ctx := context.Background()
 	query := `
         UPDATE tb_account

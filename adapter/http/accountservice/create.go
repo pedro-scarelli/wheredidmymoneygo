@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
+	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 )
 
 func (service service) Create(response http.ResponseWriter, request *http.Request) {
-	accountRequest, err := dto.FromJSONCreateAccountRequest(request.Body)
+	accountRequest, err := dto.FromJSONCreateAccountRequestDTO(request.Body)
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)

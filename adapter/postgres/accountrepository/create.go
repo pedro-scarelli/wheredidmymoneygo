@@ -2,12 +2,13 @@ package accountrepository
 
 import (
 	"context"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/dto"
 	"time"
+
+	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
+	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 )
 
-func (repository repository) Create(accountRequest *dto.CreateAccountRequest, accountNumber int, createdAt time.Time) (*domain.PublicAccount, error) {
+func (repository repository) Create(accountRequest *dto.CreateAccountRequestDTO, accountNumber int, createdAt time.Time) (*domain.PublicAccount, error) {
 	ctx := context.Background()
 	account := domain.Account{}
 
