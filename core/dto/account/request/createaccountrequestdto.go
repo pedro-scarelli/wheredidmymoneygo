@@ -14,10 +14,11 @@ type CreateAccountRequestDTO struct {
 }
 
 func FromJSONCreateAccountRequestDTO(body io.Reader) (*CreateAccountRequestDTO, error) {
-	CreateAccountRequestDTO := CreateAccountRequestDTO{}
-	if err := json.NewDecoder(body).Decode(&CreateAccountRequestDTO); err != nil {
+	createAccountRequestDTO := CreateAccountRequestDTO{}
+	if err := json.NewDecoder(body).Decode(&createAccountRequestDTO); err != nil {
 		return nil, err
 	}
 
-	return &CreateAccountRequestDTO, nil
+	return &createAccountRequestDTO, nil
 }
+

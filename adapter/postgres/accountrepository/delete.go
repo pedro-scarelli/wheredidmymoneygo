@@ -4,13 +4,13 @@ import (
 	"context"
 )
 
-func (repository repository) Delete(accountID int) error {
+func (repository repository) Delete(accountID string) error {
 	ctx := context.Background()
 
 	_, err := repository.db.Exec(
 		ctx,
 		`DELETE FROM tb_account
-		WHERE pk_it_id = $1`,
+		WHERE pk_st_id = $1`,
 		accountID)
 	if err != nil {
 		return err

@@ -4,8 +4,8 @@ import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 )
 
-func (usecase usecase) GetByID(accountID int) (*domain.PublicAccount, error) {
-	account, err := usecase.repository.GetByID(accountID)
+func (usecase usecase) GetByID(accountID string) (*domain.PublicAccount, error) {
+	account, err := usecase.repository.GetAccountByID(accountID)
 	if err != nil {
 		return nil, err
 	}

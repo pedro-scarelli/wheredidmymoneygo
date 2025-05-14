@@ -6,15 +6,17 @@ import (
 )
 
 type UpdateAccountRequestDTO struct {
-	ID        int    `json:"id"`
-	FirstName *string `json:"first_name,omitempty"`
-	LastName  *string `json:"last_name,omitempty"`
+	ID        string  `json:"id"`
+	FirstName *string `json:"firstName,omitempty"`
+	LastName  *string `json:"lastName,omitempty"`
 	Password  *string `json:"password,omitempty"`
 }
 
 func FromJSONUpdateAccountRequestDTO(body io.Reader) (*UpdateAccountRequestDTO, error) {
-	request := &UpdateAccountRequestDTO{}
-	err := json.NewDecoder(body).Decode(request)
+	updateAccountRequestDto := UpdateAccountRequestDTO{}
+	if err := json.NewDecoder(body).Decode(&updateAccountRequestDto); err != nil {
+		return nil, err
+	}
 
-	return request, err
+	return &updateAccountRequestDto, nil
 }

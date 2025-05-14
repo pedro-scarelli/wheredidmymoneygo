@@ -8,7 +8,7 @@ import (
 )
 
 func (service service) Login(response http.ResponseWriter, request *http.Request) {
-	accountRequest, err := dto.FromJSONCreateLoginRequestDTO(request.Body)
+	loginRequestDto, err := dto.FromJSONCreateLoginRequestDTO(request.Body)
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)
@@ -16,12 +16,12 @@ func (service service) Login(response http.ResponseWriter, request *http.Request
 		return
 	}
 
-	account, err := service.usecase.Login(accountRequest)
+	loginResponseDto, err := service.usecase.Login(loginRequestDto)
 
 	if err != nil {
 		response.WriteHeader(500)
 		response.Write([]byte(err.Error()))
 		return
 	}
-	json.NewEncoder(response).Encode(account)
+	json.NewEncoder(response).Encode(loginResponseDto)
 }

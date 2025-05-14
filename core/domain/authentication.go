@@ -14,7 +14,3 @@ type AuthenticationService interface {
 type AuthenticationUseCase interface {
 	Login(accountRequest *requestDto.LoginRequestDTO) (*responseDto.LoginResponseDTO, error)
 }
-
-type AuthenticationRepository interface {
-	Login() (error)
-}

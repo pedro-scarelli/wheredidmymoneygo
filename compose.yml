@@ -9,6 +9,10 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U scarelli -d db_where_did_my_money_go"]
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
@@ -20,7 +24,8 @@ services:
     environment:
       - DB_HOST=database
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
 volumes:
   postgres_data:

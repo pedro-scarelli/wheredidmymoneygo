@@ -7,13 +7,13 @@ import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 )
 
-func (repository repository) GetByID(accountID int) (*domain.Account, error) {
+func (repository repository) GetAccountByID(accountID string) (*domain.Account, error) {
 	ctx := context.Background()
 	row := repository.db.QueryRow(ctx,
 		`select 
-		pk_it_id, st_first_name, st_last_name, st_cpf, st_email, it_number, it_balance, dt_created_at, st_password
+		pk_st_id, st_first_name, st_last_name, st_cpf, st_email, it_number, it_balance, dt_created_at, st_password
 		from tb_account
-		where pk_it_id = $1`,
+		where pk_st_id = $1`,
 		accountID)
 
 	return scanIntoAccount(row)

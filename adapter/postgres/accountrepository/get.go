@@ -16,11 +16,11 @@ func (repository repository) Get(paginationRequestDTO *dto.PaginationRequestPara
 
 	query := `
         SELECT
-            pk_it_id, st_first_name, st_last_name, st_cpf, st_email,
+            pk_st_id, st_first_name, st_last_name, st_cpf, st_email,
             it_number, it_balance, dt_created_at,
             COUNT(*) OVER() AS total_count
         FROM tb_account
-        ORDER BY pk_it_id
+        ORDER BY pk_st_id
         LIMIT $1 OFFSET $2
     `
 	rows, err := repository.db.Query(ctx, query, itemsPerPage, offset)

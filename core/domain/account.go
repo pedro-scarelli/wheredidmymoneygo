@@ -10,7 +10,7 @@ import (
 )
 
 type PublicAccount struct {
-	ID        int       `json:"id"`
+	ID        string    `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
 	Number    int64     `json:"number"`
@@ -21,7 +21,7 @@ type PublicAccount struct {
 }
 
 type Account struct {
-	ID        int       `json:"id"`
+	ID        string    `json:"id"`
 	FirstName string    `json:"firstName"`
 	LastName  string    `json:"lastName"`
 	Number    int64     `json:"number"`
@@ -43,16 +43,17 @@ type AccountService interface {
 
 type AccountUseCase interface {
 	Create(accountRequest *accountRequestDto.CreateAccountRequestDTO) (*PublicAccount, error)
-	Delete(accountID int) error
+	Delete(accountID string) error
 	Update(accountRequest *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
 	Get(paginationRequest *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
-	GetByID(accountID int) (*PublicAccount, error)
+	GetByID(accountID string) (*PublicAccount, error)
 }
 
 type AccountRepository interface {
 	Create(accountRequest *accountRequestDto.CreateAccountRequestDTO, accountNumber int, createdAt time.Time) (*PublicAccount, error)
-	Delete(accountID int) error
+	Delete(accountID string) error
 	Update(accountRequest *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
 	Get(paginationRequestParams *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
-	GetByID(accountID int) (*Account, error)
+	GetAccountByID(accountID string) (*Account, error)
+	GetAccountByEmail(email string) (*Account, error)
 }

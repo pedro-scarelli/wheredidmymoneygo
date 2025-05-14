@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 )
@@ -15,9 +16,10 @@ func (repository repository) Create(accountRequest *dto.CreateAccountRequestDTO,
 	err := repository.db.QueryRow(
 		ctx,
 		`INSERT INTO tb_account
-		(st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, it_balance, dt_created_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+		(pk_st_id, st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, it_balance, dt_created_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 		returning *`,
+		uuid.New().String(),
 		accountRequest.FirstName,
 		accountRequest.LastName,
 		accountRequest.CPF,

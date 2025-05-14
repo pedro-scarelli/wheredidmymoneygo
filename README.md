@@ -41,34 +41,47 @@ docker compose up -d
 Endpoints da API
 
 URL base: http://localhost:3000
-
+### Registrar conta
 POST /account HTTP/1.1
 Content-Type: application/json
 
 {
-"firstName": "Pedro",
-"lastName": "Scarelli",
-"cpf": "{CPF_DO_USUARIO}",
-"email": "pvscarelli@gmail.com",
-"password": "Testee#1"
+    "firstName": "{PRIMEIRO_NOME}",
+    "lastName": "{ULTIMO_NOME}",
+    "cpf": "{CPF}",
+    "email": "{EMAIL}",
+    "password": "{SENHA}"
 }
+
+### Buscar todas as contas
+GET /account?page={PAGINA}&temsPerPage={ITENS_POR_PAGINA} HTTP/1.1
+
+### Buscar conta por ID
+GET /account/{ID} HTTP/1.1
+
+### Atualizar conta
+PATCH /account HTTP/1.1
+Content-Type: application/json
+
+{
+    "id": "{ID}",
+    "firstName": "{PRIMEIRO_NOME}",
+    "lastName": "{ULTIMO_NOME}",
+    "password": "{SENHA}"
+}
+
+### Deletar conta por ID
+DELETE /account/{ID} HTTP/1.1
 
 ## Autenticação
 
 Método Rota Auth Descrição
-POST /login Sem auth Autentica e retorna JWT
-Exemplo: Login
-
 POST /login HTTP/1.1
 Content-Type: application/json
 
 {
-"email": "pvscarelli@gmail.com",
-"password": "Testee#1"
+"email": "{EMAIL}",
+"password": "{SENHA}"
 }
 
-Retorno de sucesso:
-
-{
-"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9…"
-}
+Retorna token de autenticação
