@@ -6,7 +6,7 @@ import (
 )
 
 func (service service) Delete(response http.ResponseWriter, request *http.Request) {
-	accountID, err := getID(request)
+	accountID, err := GetIDFromRequest(request)
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)

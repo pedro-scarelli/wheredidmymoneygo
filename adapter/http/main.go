@@ -9,6 +9,8 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/postgres"
+
+	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/http/middleware"
 	"github.com/pedro-scarelli/wheredidmymoneygo/di"
 )
 
@@ -22,13 +24,16 @@ func main() {
 	authenticationService := di.ConfigAuthenticationDI(conn)
 
 	router := mux.NewRouter()
-	router.Handle("/account", http.HandlerFunc(accountService.Create)).Methods("POST")
-	router.Handle("/account", http.HandlerFunc(accountService.Update)).Methods("PATCH")
-	router.Handle("/account", http.HandlerFunc(accountService.Get)).Methods("GET")
-	router.Handle("/account/{id}", http.HandlerFunc(accountService.GetByID)).Methods("GET")
-	router.Handle("/account/{id}", http.HandlerFunc(accountService.Delete)).Methods("DELETE")
-
 	router.Handle("/login", http.HandlerFunc(authenticationService.Login)).Methods("POST")
+	router.Handle("/account", http.HandlerFunc(accountService.Create)).Methods("POST")
+
+	protectedRouter := router.PathPrefix("").Subrouter()
+	protectedRouter.Use(middleware.JwtAuthorizer)
+
+	protectedRouter.Handle("/account", http.HandlerFunc(accountService.Update)).Methods("PATCH")
+	protectedRouter.Handle("/account", http.HandlerFunc(accountService.Get)).Methods("GET")
+	protectedRouter.Handle("/account/{id}", http.HandlerFunc(accountService.GetByID)).Methods("GET")
+	protectedRouter.Handle("/account/{id}", http.HandlerFunc(accountService.Delete)).Methods("DELETE")
 
 	port := os.Getenv("API_PORT")
 	log.Printf("LISTEN ON PORT: %v", port)
