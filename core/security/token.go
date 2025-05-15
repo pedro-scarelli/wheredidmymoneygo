@@ -8,7 +8,7 @@ import (
 )
 
 func GenerateJwtToken(accountID string) string {
-	jwtSecret := os.Getenv("JWT_SECRET")
+	jwtSecret := os.Getenv("JWT_SECRET_KEY")
 	secretKey := []byte(jwtSecret)
 
 	claims := jwt.MapClaims{
@@ -25,3 +25,4 @@ func GenerateJwtToken(accountID string) string {
 
 	return tokenString
 }
+

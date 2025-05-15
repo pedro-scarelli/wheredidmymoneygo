@@ -55,13 +55,16 @@ Content-Type: application/json
 
 ### Buscar todas as contas
 GET /account?page={PAGINA}&temsPerPage={ITENS_POR_PAGINA} HTTP/1.1
+Authorization: Bearer {TOKEN_DO_USUARIO}
 
 ### Buscar conta por ID
 GET /account/{ID} HTTP/1.1
+Authorization: Bearer {TOKEN_DO_USUARIO}
 
 ### Atualizar conta
 PATCH /account HTTP/1.1
 Content-Type: application/json
+Authorization: Bearer {TOKEN_DO_USUARIO}
 
 {
     "id": "{ID}",
@@ -72,6 +75,7 @@ Content-Type: application/json
 
 ### Deletar conta por ID
 DELETE /account/{ID} HTTP/1.1
+Authorization: Bearer {TOKEN_DO_USUARIO}
 
 ## Autenticação
 

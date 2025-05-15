@@ -13,7 +13,7 @@ import (
 var jwtSecret = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 type Claims struct {
-	UserID string `json:"userId"`
+	UserID string `json:"sub"`
 	jwt.RegisteredClaims
 }
 
@@ -42,7 +42,7 @@ func JwtAuthorizer(next http.Handler) http.Handler {
 		})
 		fmt.Printf("error: %v", err)
 		if err != nil || !token.Valid {
-			respondWithError(w, http.StatusUnauthorized, "Token inválido")
+			respondWithError(w, http.StatusUnauthorized, "Token invalido: "+err.Error())
 			return
 		}
 
