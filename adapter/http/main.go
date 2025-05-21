@@ -35,6 +35,8 @@ func main() {
 	protectedRouter.Handle("/account/{id}", http.HandlerFunc(accountService.GetByID)).Methods("GET")
 	protectedRouter.Handle("/account/{id}", http.HandlerFunc(accountService.Delete)).Methods("DELETE")
 
+	protectedRouter.Handle("/account/movement", http.HandlerFunc(accountService.Movement)).Methods("POST")
+
 	port := os.Getenv("API_PORT")
 	log.Printf("LISTEN ON PORT: %v", port)
 	http.ListenAndServe(fmt.Sprintf(":%v", port), router)

@@ -39,21 +39,24 @@ type AccountService interface {
 	Update(response http.ResponseWriter, request *http.Request)
 	Get(response http.ResponseWriter, request *http.Request)
 	GetByID(response http.ResponseWriter, request *http.Request)
+	Movement(response http.ResponseWriter, request *http.Request)
 }
 
 type AccountUseCase interface {
-	Create(accountRequest *accountRequestDto.CreateAccountRequestDTO) (*PublicAccount, error)
+	Create(createAccountRequestDto *accountRequestDto.CreateAccountRequestDTO) (*PublicAccount, error)
 	Delete(accountID string) error
-	Update(accountRequest *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
-	Get(paginationRequest *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
+	Update(updateAccountRequestDto *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
+	Get(paginationRequestDto *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
 	GetByID(accountID string) (*PublicAccount, error)
+	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO) error
 }
 
 type AccountRepository interface {
-	Create(accountRequest *accountRequestDto.CreateAccountRequestDTO, accountNumber int, createdAt time.Time) (*PublicAccount, error)
+	Create(createAccountRequestDto *accountRequestDto.CreateAccountRequestDTO, accountNumber int, createdAt time.Time) (*PublicAccount, error)
 	Delete(accountID string) error
-	Update(accountRequest *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
-	Get(paginationRequestParams *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
+	Update(updateAccountRequestDto *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
+	Get(paginationRequestDto *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
 	GetAccountByID(accountID string) (*Account, error)
 	GetAccountByEmail(email string) (*Account, error)
+	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO) error
 }
