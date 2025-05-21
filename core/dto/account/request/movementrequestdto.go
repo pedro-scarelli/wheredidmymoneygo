@@ -1,0 +1,46 @@
+package dto
+
+import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	enum "github.com/pedro-scarelli/wheredidmymoneygo/core/domain/enum"
+	"io"
+)
+
+type MovementRequestDTO struct {
+	UserID      string            `json:"-"`
+	Value       float64           `json:"value"`
+	Type        enum.MovementType `json:"type"`
+	Occurrences int               `json:"occurrence"`
+}
+
+func (d *MovementRequestDTO) Validate() error {
+	switch d.Type {
+	case enum.DEBITO, enum.CREDITO:
+	default:
+		return fmt.Errorf("tipo inválido: %s. Valores permitidos: %s ou %s",
+			d.Type,
+			enum.DEBITO,
+			enum.CREDITO)
+	}
+
+	if d.Occurrences < 1 || d.Occurrences > 12 {
+		return errors.New("ocorrência deve ser entre 1 e 12")
+	}
+
+	return nil
+}
+
+func FromJSONCreateMovementRequestDTO(body io.Reader) (*MovementRequestDTO, error) {
+	createMovementRequestDTO := MovementRequestDTO{}
+	if err := json.NewDecoder(body).Decode(&createMovementRequestDTO); err != nil {
+		return nil, err
+	}
+
+	if err := createMovementRequestDTO.Validate(); err != nil {
+		return nil, err
+	}
+
+	return &createMovementRequestDTO, nil
+}
