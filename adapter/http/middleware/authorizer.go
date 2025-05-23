@@ -3,17 +3,16 @@ package middleware
 import (
 	"context"
 	"fmt"
+	"github.com/golang-jwt/jwt/v5"
 	"net/http"
 	"os"
 	"strings"
-
-	"github.com/golang-jwt/jwt/v5"
 )
 
 var jwtSecret = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 type Claims struct {
-	UserID string `json:"sub"`
+	AccountID string `json:"sub"`
 	jwt.RegisteredClaims
 }
 
@@ -45,7 +44,19 @@ func JwtAuthorizer(next http.Handler) http.Handler {
 			respondWithError(w, http.StatusUnauthorized, "Token invalido: "+err.Error())
 			return
 		}
-
+		// if claims.AccountID != "" {
+		// 	exists, err := chamar service pra verificar se conta existe
+		// 	if err != nil {
+		// 		fmt.Printf("Error checking account existence: %v\n", err)
+		// 		respondWithError(w, http.StatusInternalServerError, "Internal server error")
+		// 		return
+		// 	}
+		// 	if !exists {
+		// 		respondWithError(w, http.StatusUnauthorized, "Account not found")
+		// 		return
+		// 	}
+		// }
+		//
 		ctx := context.WithValue(r.Context(), "userClaims", claims)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

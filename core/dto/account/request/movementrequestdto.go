@@ -9,10 +9,11 @@ import (
 )
 
 type MovementRequestDTO struct {
-	UserID      string            `json:"-"`
+	AccountID   string            `json:"-"`
 	Value       float64           `json:"value"`
 	Type        enum.MovementType `json:"type"`
-	Occurrences int               `json:"occurrence"`
+	Recurrence  int               `json:"recurrence"`
+	Description string            `json:"description"`
 }
 
 func (d *MovementRequestDTO) Validate() error {
@@ -25,7 +26,7 @@ func (d *MovementRequestDTO) Validate() error {
 			enum.CREDITO)
 	}
 
-	if d.Occurrences < 1 || d.Occurrences > 12 {
+	if d.Recurrence < 1 || d.Recurrence > 12 {
 		return errors.New("ocorrência deve ser entre 1 e 12")
 	}
 

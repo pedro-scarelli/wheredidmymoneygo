@@ -13,11 +13,11 @@ func GetIDFromRequest(r *http.Request) (string, error) {
 	return id, nil
 }
 
-func GetUserIDFromToken(r *http.Request) (string, error) {
+func GetAccountIDFromToken(r *http.Request) (string, error) {
 	claims, ok := r.Context().Value("userClaims").(*middleware.Claims)
 	if !ok {
 		return "", fmt.Errorf("Erro ao obter claims do token")
 	}
 
-	return claims.UserID, nil
+	return claims.AccountID, nil
 }

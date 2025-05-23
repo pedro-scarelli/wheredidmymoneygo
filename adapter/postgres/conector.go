@@ -47,7 +47,7 @@ func GetConnection(context context.Context) *pgxpool.Pool {
 func RunMigrations() {
 	m, err := migrate.New("file://database/migrations", "pgx"+dbURLFromEnv())
 	if err != nil {
-		log.Println(err)
+		log.Fatal(err)
 	}
 
 	if err := m.Up(); err != nil {

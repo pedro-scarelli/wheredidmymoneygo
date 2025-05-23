@@ -84,8 +84,20 @@ POST /login HTTP/1.1
 Content-Type: application/json
 
 {
-"email": "{EMAIL}",
-"password": "{SENHA}"
+    "email": "{EMAIL}",
+    "password": "{SENHA}"
 }
 
 Retorna token de autenticação
+
+## Movimentação
+
+POST /account/movement'
+Authorization: Bearer {TOKEN_DO_USUARIO}
+
+{
+    "value": {VALOR_COM_2_CASAS_APOS_A_VIRGULA},
+    "type": "{CREDITO_OU_DEBITO}"
+    "recurrence": {NUMERO_DE_RECORRENCIA - 1 A 12},
+    "description": "{DESCRICAO}"
+}
