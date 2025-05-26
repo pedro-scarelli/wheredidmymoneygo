@@ -10,7 +10,7 @@
 
     🔐 Login baseado em JWT e rotas protegidas
 
-    📊 Planejado: CRUD de lançamentos de despesas, categorização, relatórios mensais
+    📊 Planejado: Exportação de movimentos pra pranilha de Excel
 
 ## 📦 Pré-requisitos
 
