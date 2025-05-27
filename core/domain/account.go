@@ -38,7 +38,7 @@ type Movement struct {
 	ID          string            `json:"id"`
 	Type        enum.MovementType `json:"type"`
 	Value       int               `json:"value"`
-	Recurrence  int               `json:"recurrence"`
+	DueDate     time.Time         `json:"dueDate"`
 	AccountID   string            `json:"accountId"`
 	Description string            `json:"description"`
 	CreatedAt   time.Time         `json:"createdAt"`
