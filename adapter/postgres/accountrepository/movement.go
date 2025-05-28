@@ -4,12 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 	"time"
 )
 
-func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO, createdAt time.Time) ([]*domain.Movement, error) {
+func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO, createdAt time.Time) error {
 	ctx := context.Background()
 
 	recurrence := movementRequestDto.Recurrence
@@ -17,7 +16,7 @@ func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO
 	dueDates := make([]time.Time, recurrence)
 	values := make([]int, recurrence)
 
-	for i := 0; i < recurrence; i++ {
+	for i := range recurrence {
 		ids[i] = uuid.New().String()
 		dueDates[i] = movementRequestDto.DueDate.AddDate(0, i, 0)
 		values[i] = int(movementRequestDto.Value * 100)
@@ -34,10 +33,9 @@ func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO
             unnest($5::text[]), 
             unnest($6::text[]), 
             unnest($7::timestamp[])
-        RETURNING *
     `
 
-	rows, err := repository.db.Query(
+	_, err := repository.db.Exec(
 		ctx,
 		query,
 		ids,
@@ -50,29 +48,10 @@ func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO
 	)
 
 	if err != nil {
-		return nil, fmt.Errorf("erro ao inserir movimentos: %w", err)
-	}
-	defer rows.Close()
-
-	var movements []*domain.Movement
-	for rows.Next() {
-		var m domain.Movement
-		err := rows.Scan(
-			&m.ID,
-			&m.Value,
-			&m.DueDate,
-			&m.Type,
-			&m.AccountID,
-			&m.Description,
-			&m.CreatedAt,
-		)
-		if err != nil {
-			return nil, fmt.Errorf("erro ao ler movimento: %w", err)
-		}
-		movements = append(movements, &m)
+		return fmt.Errorf("erro ao inserir movimentos: %w", err)
 	}
 
-	return movements, nil
+	return nil
 }
 
 func RepeatString(value string, n int) []string {

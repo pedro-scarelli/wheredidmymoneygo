@@ -10,14 +10,16 @@ func (service service) Delete(response http.ResponseWriter, request *http.Reques
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)
-		response.Write([]byte(err.Error()))
+		json.NewEncoder(response).Encode(map[string]string{"error": err.Error()})
+		
 		return
 	}
 
 	err = service.usecase.Delete(accountID)
 	if err != nil {
 		response.WriteHeader(500)
-		response.Write([]byte(err.Error()))
+		json.NewEncoder(response).Encode(map[string]string{"error": err.Error()})
+		
 		return
 	}
 

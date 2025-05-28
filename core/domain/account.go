@@ -59,7 +59,7 @@ type AccountUseCase interface {
 	Update(updateAccountRequestDto *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
 	Get(paginationRequestDto *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
 	GetByID(accountID string) (*PublicAccount, error)
-	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO) (*Movement, error)
+	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO) error
 }
 
 type AccountRepository interface {
@@ -69,5 +69,5 @@ type AccountRepository interface {
 	Get(paginationRequestDto *dto.PaginationRequestParams) (*Pagination[[]PublicAccount], error)
 	GetAccountByID(accountID string) (*Account, error)
 	GetAccountByEmail(email string) (*Account, error)
-	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO, createdAt time.Time) (*Movement, error)
+	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO, createdAt time.Time) error
 }

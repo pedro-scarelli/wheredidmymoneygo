@@ -1,14 +1,20 @@
 package accountusecase
 
 import (
+	"errors"
+
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 )
 
 func (usecase usecase) GetByID(accountID string) (*domain.PublicAccount, error) {
 	account, err := usecase.repository.GetAccountByID(accountID)
 	if err != nil {
-		return nil, err
+		if errors.Is(err, domain.ErrAccountNotFound) {
+			return nil, err
+		}
+		return nil, errors.New("failed to get account")
 	}
+
 
 	publicAccount := &domain.PublicAccount{
 		ID:        account.ID,

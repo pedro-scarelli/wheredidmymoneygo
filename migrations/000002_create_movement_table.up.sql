@@ -6,5 +6,8 @@ CREATE TABLE tb_movement (
   st_description VARCHAR(255) NOT NULL,
   dt_created_at TIMESTAMP NOT NULL,
   st_account_id VARCHAR(36),
-  CONSTRAINT fk_account_movement FOREIGN KEY (st_account_id) REFERENCES tb_account (pk_st_id)
+  CONSTRAINT fk_account_movement 
+    FOREIGN KEY (st_account_id) 
+    REFERENCES tb_account(pk_st_id) 
+    ON DELETE CASCADE
 );
