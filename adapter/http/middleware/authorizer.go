@@ -35,7 +35,7 @@ func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http
 
             tokenParts := strings.Split(authHeader, " ")
             if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
-                respondWithError(w, http.StatusUnauthorized, "Formato de token inválido")
+                respondWithError(w, http.StatusUnauthorized, "invalid token")
                 return
             }
 
@@ -44,13 +44,13 @@ func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http
 
             token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (any, error) {
                 if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-                    return nil, fmt.Errorf("método de assinatura inesperado: %v", token.Header["alg"])
+                    return nil, fmt.Errorf("wrong signature method: %v", token.Header["alg"])
                 }
                 return jwtSecret, nil
             })
             
             if err != nil || !token.Valid {
-                respondWithError(w, http.StatusUnauthorized, "Token invalido: "+err.Error())
+                respondWithError(w, http.StatusUnauthorized, "invalid token")
                 return
             }
             
@@ -58,11 +58,11 @@ func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http
                 _, err := accountUseCase.GetByID(claims.AccountID)
                 if err != nil {
                     if errors.Is(err, domain.ErrAccountNotFound) {
-                        respondWithError(w, http.StatusUnauthorized, "Account not found")
+                        respondWithError(w, http.StatusUnauthorized, "invalid token")
                         return
                     }
-                    fmt.Printf("Error checking account existence: %v\n", err)
-                    respondWithError(w, http.StatusInternalServerError, "Internal server error")
+                    fmt.Printf("error checking account existence: %v\n", err)
+                    respondWithError(w, http.StatusInternalServerError, "internal server error")
                     return
                 }
             }
