@@ -8,10 +8,10 @@ import (
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/usecase/accountusecase"
 )
 
-func ConfigAccountDI(conn postgres.PoolInterface) domain.AccountService {
+func ConfigAccountDI(conn postgres.PoolInterface) (domain.AccountService, domain.AccountUseCase) {
 	accountRepository := accountrepository.New(conn)
 	accountUseCase := accountusecase.New(accountRepository)
 	accountService := accountservice.New(accountUseCase)
 
-	return accountService
+	return accountService, accountUseCase
 }

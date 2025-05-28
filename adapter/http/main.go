@@ -20,7 +20,7 @@ func main() {
 	defer conn.Close()
 
 	postgres.RunMigrations()
-	accountService := di.ConfigAccountDI(conn)
+	accountService, accountUseCase := di.ConfigAccountDI(conn)
 	authenticationService := di.ConfigAuthenticationDI(conn)
 
 	router := mux.NewRouter()
@@ -28,7 +28,7 @@ func main() {
 	router.Handle("/account", http.HandlerFunc(accountService.Create)).Methods("POST")
 
 	protectedRouter := router.PathPrefix("").Subrouter()
-	protectedRouter.Use(middleware.JwtAuthorizer)
+	protectedRouter.Use(middleware.JwtAuthorizer(accountUseCase))
 
 	protectedRouter.Handle("/account", http.HandlerFunc(accountService.Update)).Methods("PATCH")
 	protectedRouter.Handle("/account", http.HandlerFunc(accountService.Get)).Methods("GET")
