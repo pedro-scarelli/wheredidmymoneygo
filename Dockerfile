@@ -1,8 +1,5 @@
 FROM golang:1.24.2-bookworm as builder
 
-ARG GOPROXY=direct
-ENV GOPROXY=${GOPROXY}
-
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod tidy
