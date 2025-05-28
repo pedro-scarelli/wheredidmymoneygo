@@ -99,5 +99,6 @@ Authorization: Bearer {TOKEN_DO_USUARIO}
     "value": {VALOR_COM_2_CASAS_APOS_A_VIRGULA},
     "type": "{CREDITO_OU_DEBITO}"
     "recurrence": {NUMERO_DE_RECORRENCIA - 1 A 12},
+    "dueDate": "{DATA_NO_FORMATO 2025-05-27T00:00:00Z}",
     "description": "{DESCRICAO}"
 }
