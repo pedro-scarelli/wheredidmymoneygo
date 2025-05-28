@@ -2,9 +2,10 @@ package accountservice
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/pedro-scarelli/wheredidmymoneygo/adapter/http/middleware"
-	"net/http"
 )
 
 func GetIDFromRequest(r *http.Request) (string, error) {
@@ -16,7 +17,7 @@ func GetIDFromRequest(r *http.Request) (string, error) {
 func GetAccountIDFromToken(r *http.Request) (string, error) {
 	claims, ok := r.Context().Value("userClaims").(*middleware.Claims)
 	if !ok {
-		return "", fmt.Errorf("Erro ao obter claims do token")
+		return "", fmt.Errorf("erro ao obter claims do token")
 	}
 
 	return claims.AccountID, nil

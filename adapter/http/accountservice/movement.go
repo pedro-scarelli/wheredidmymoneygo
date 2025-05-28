@@ -14,24 +14,30 @@ func (service service) Movement(response http.ResponseWriter, request *http.Requ
 	if err != nil {
 		response.WriteHeader(400)
 		json.NewEncoder(response).Encode(map[string]string{"error": err.Error()})
+		
 		return
 	}
 
 	AccountID, err := GetAccountIDFromToken(request)
 	if err != nil {
 		response.WriteHeader(401)
-		response.Write([]byte("Invalid token"))
+		json.NewEncoder(response).Encode(map[string]string{"message": "invalid token"})
+		
 		return
 	}
 
 	movementRequestDTO.AccountID = AccountID
-	movementCreated, err := service.usecase.Movement(movementRequestDTO)
+	err = service.usecase.Movement(movementRequestDTO)
 	if err != nil {
 		response.WriteHeader(500)
-		response.Write([]byte(err.Error()))
+		json.NewEncoder(response).Encode(map[string]string{"error": err.Error()})
+		
 		return
 	}
 
 	response.WriteHeader(200)
-	json.NewEncoder(response).Encode(movementCreated)
+	json.NewEncoder(response).Encode(map[string]any{
+		"message": "Movement registered successfully",
+	},
+	)
 }

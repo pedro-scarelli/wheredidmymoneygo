@@ -6,6 +6,7 @@ import (
 	"fmt"
 	enum "github.com/pedro-scarelli/wheredidmymoneygo/core/domain/enum"
 	"io"
+	"time"
 )
 
 type MovementRequestDTO struct {
@@ -13,6 +14,7 @@ type MovementRequestDTO struct {
 	Value       float64           `json:"value"`
 	Type        enum.MovementType `json:"type"`
 	Recurrence  int               `json:"recurrence"`
+	DueDate     time.Time         `json:"dueDate"`
 	Description string            `json:"description"`
 }
 

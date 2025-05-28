@@ -2,6 +2,7 @@ package accountrepository
 
 import (
 	"context"
+	"errors"
 
 	"github.com/jackc/pgx/v4"
 	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
@@ -16,7 +17,12 @@ func (repository repository) GetAccountByID(accountID string) (*domain.Account, 
 		where pk_st_id = $1`,
 		accountID)
 
-	return scanIntoAccount(row)
+	account, err := scanIntoAccount(row)
+	if errors.Is(err, pgx.ErrNoRows) {
+		return nil, domain.ErrAccountNotFound
+	}
+
+	return account, err
 }
 
 func scanIntoAccount(row pgx.Row) (*domain.Account, error) {

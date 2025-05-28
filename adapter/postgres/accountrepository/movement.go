@@ -2,43 +2,70 @@ package accountrepository
 
 import (
 	"context"
-	"time"
-
+	"fmt"
 	"github.com/google/uuid"
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
+	"time"
 )
 
-func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO, createdAt time.Time) (*domain.Movement, error) {
+func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO, createdAt time.Time) error {
 	ctx := context.Background()
-	movement := domain.Movement{}
 
-	err := repository.db.QueryRow(
+	recurrence := movementRequestDto.Recurrence
+	ids := make([]string, recurrence)
+	dueDates := make([]time.Time, recurrence)
+	values := make([]int, recurrence)
+
+	for i := range recurrence {
+		ids[i] = uuid.New().String()
+		dueDates[i] = movementRequestDto.DueDate.AddDate(0, i, 0)
+		values[i] = int(movementRequestDto.Value * 100)
+	}
+
+	query := `
+        INSERT INTO tb_movement 
+            (pk_st_id, it_value, dt_due_date, st_type, st_account_id, st_description, dt_created_at)
+        SELECT 
+            unnest($1::uuid[]), 
+            unnest($2::integer[]), 
+            unnest($3::date[]), 
+            unnest($4::text[]), 
+            unnest($5::text[]), 
+            unnest($6::text[]), 
+            unnest($7::timestamp[])
+    `
+
+	_, err := repository.db.Exec(
 		ctx,
-		`INSERT INTO tb_movement
-		(pk_st_id, it_value, it_recurrence, st_type, st_account_id, st_description, dt_created_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING pk_st_id, it_value, it_recurrence, st_type, st_account_id, st_description, dt_created_at`,
-		uuid.New().String(),
-		movementRequestDto.Value*100,
-		movementRequestDto.Recurrence,
-		movementRequestDto.Type,
-		movementRequestDto.AccountID,
-		movementRequestDto.Description,
-		createdAt,
-	).Scan(
-		&movement.ID,
-		&movement.Value,
-		&movement.Recurrence,
-		&movement.Type,
-		&movement.AccountID,
-		&movement.Description,
-		&movement.CreatedAt,
+		query,
+		ids,
+		values,
+		dueDates,
+		RepeatString(string(movementRequestDto.Type), recurrence),
+		RepeatString(movementRequestDto.AccountID, recurrence),
+		RepeatString(movementRequestDto.Description, recurrence),
+		RepeatTime(createdAt, recurrence),
 	)
 
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("erro ao inserir movimentos: %w", err)
 	}
 
-	return &movement, nil
+	return nil
+}
+
+func RepeatString(value string, n int) []string {
+	arr := make([]string, n)
+	for i := range arr {
+		arr[i] = value
+	}
+	return arr
+}
+
+func RepeatTime(value time.Time, n int) []time.Time {
+	arr := make([]time.Time, n)
+	for i := range arr {
+		arr[i] = value
+	}
+	return arr
 }
