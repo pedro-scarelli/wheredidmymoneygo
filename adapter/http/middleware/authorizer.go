@@ -22,7 +22,7 @@ type Claims struct {
 
 type contextKey string
 
-const userClaimsKey contextKey = "userClaims"
+var UserClaimsKey contextKey = "userClaims"
 
 func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http.Handler {
     return func(next http.Handler) http.Handler {
@@ -67,7 +67,7 @@ func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http
                 }
             }
             
-            ctx := context.WithValue(r.Context(), userClaimsKey, claims)
+            ctx := context.WithValue(r.Context(), UserClaimsKey, claims)
             next.ServeHTTP(w, r.WithContext(ctx))
         })
     }

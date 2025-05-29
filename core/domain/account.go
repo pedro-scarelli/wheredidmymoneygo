@@ -54,7 +54,7 @@ type AccountService interface {
 type AccountUseCase interface {
 	Create(createAccountRequestDto *accountRequestDto.CreateAccountRequestDTO) (*PublicAccount, error)
 	Delete(accountID string) error
-	Update(updateAccountRequestDto *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
+	Update(updateAccountRequestDto *accountRequestDto.UpdateAccountRequestDTO) error
 	GetByID(accountID string) (*PublicAccount, error)
 	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO) error
 }
@@ -62,7 +62,7 @@ type AccountUseCase interface {
 type AccountRepository interface {
 	Create(createAccountRequestDto *accountRequestDto.CreateAccountRequestDTO, accountNumber int, createdAt time.Time) (*PublicAccount, error)
 	Delete(accountID string) error
-	Update(updateAccountRequestDto *accountRequestDto.UpdateAccountRequestDTO) (*PublicAccount, error)
+	Update(updateAccountRequestDto *accountRequestDto.UpdateAccountRequestDTO) error
 	GetAccountByID(accountID string) (*Account, error)
 	GetAccountByEmail(email string) (*Account, error)
 	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO, createdAt time.Time) error

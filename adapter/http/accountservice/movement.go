@@ -21,7 +21,7 @@ func (service service) Movement(response http.ResponseWriter, request *http.Requ
 	AccountID, err := GetAccountIDFromToken(request)
 	if err != nil {
 		response.WriteHeader(401)
-		json.NewEncoder(response).Encode(map[string]string{"message": "invalid token"})
+		json.NewEncoder(response).Encode(map[string]string{"message": err.Error()})
 		
 		return
 	}

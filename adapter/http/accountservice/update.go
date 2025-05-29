@@ -17,8 +17,7 @@ func (service service) Update(response http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	account, err := service.usecase.Update(updateAccountRequestDto)
-
+ 	err = service.usecase.Update(updateAccountRequestDto)
 	if err != nil {
 		response.WriteHeader(500)
 		json.NewEncoder(response).Encode(map[string]string{"error": err.Error()})
@@ -26,5 +25,5 @@ func (service service) Update(response http.ResponseWriter, request *http.Reques
 		return
 	}
 
-	json.NewEncoder(response).Encode(account)
+	json.NewEncoder(response).Encode(map[string]any{"message": "User updated successfully"})
 }

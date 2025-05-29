@@ -4,12 +4,10 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/pedro-scarelli/wheredidmymoneygo/core/domain"
 	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
 )
 
-func (repository repository) Update(updateAccountRequestDto *dto.UpdateAccountRequestDTO) (*domain.PublicAccount, error) {
-	account := domain.Account{}
+func (repository repository) Update(updateAccountRequestDto *dto.UpdateAccountRequestDTO) error {
 	ctx := context.Background()
 	query := `
 		UPDATE tb_account
@@ -20,35 +18,18 @@ func (repository repository) Update(updateAccountRequestDto *dto.UpdateAccountRe
 		RETURNING pk_st_id, st_first_name, st_last_name, st_password, it_number, st_cpf, st_email, it_balance;
 	    `
 
-	err := repository.db.QueryRow(
+	_, err := repository.db.Exec(
 		ctx,
 		query,
 		updateAccountRequestDto.FirstName,
 		updateAccountRequestDto.LastName,
 		updateAccountRequestDto.Password,
 		updateAccountRequestDto.ID,
-	).Scan(
-		&account.ID,
-		&account.FirstName,
-		&account.LastName,
-		&account.Password,
-		&account.Number,
-		&account.CPF,
-		&account.Email,
-		&account.Balance,
 	)
+
 	if err != nil {
-		return nil, fmt.Errorf("erro ao atualizar conta no banco: %w", err)
+		return fmt.Errorf("erro ao atualizar conta no banco: %w", err)
 	}
 
-	return &domain.PublicAccount{
-		ID:        account.ID,
-		FirstName: account.FirstName,
-		LastName:  account.LastName,
-		CPF:       account.CPF,
-		Email:     account.Email,
-		Number:    account.Number,
-		Balance:   account.Balance,
-		CreatedAt: account.CreatedAt,
-	}, nil
+	return nil
 }
