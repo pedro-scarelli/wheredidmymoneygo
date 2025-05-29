@@ -29,13 +29,13 @@ func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http
         return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
             authHeader := r.Header.Get("Authorization")
             if authHeader == "" {
-                respondWithError(w, http.StatusUnauthorized, "unauthorized")
+                respondUnauthorized(w)
                 return
             }
 
             tokenParts := strings.Split(authHeader, " ")
             if len(tokenParts) != 2 || tokenParts[0] != "Bearer" {
-                respondWithError(w, http.StatusUnauthorized, "invalid token")
+                respondUnauthorized(w)
                 return
             }
 
@@ -50,7 +50,7 @@ func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http
             })
             
             if err != nil || !token.Valid {
-                respondWithError(w, http.StatusUnauthorized, "invalid token")
+                respondUnauthorized(w)
                 return
             }
             
@@ -58,7 +58,7 @@ func JwtAuthorizer(accountUseCase domain.AccountUseCase) func(http.Handler) http
                 _, err := accountUseCase.GetByID(claims.AccountID)
                 if err != nil {
                     if errors.Is(err, domain.ErrAccountNotFound) {
-                        respondWithError(w, http.StatusUnauthorized, "invalid token")
+                        respondUnauthorized(w)
                         return
                     }
                     fmt.Printf("error checking account existence: %v\n", err)
@@ -77,4 +77,10 @@ func respondWithError(w http.ResponseWriter, code int, message string) {
     w.Header().Set("Content-Type", "application/json")
     w.WriteHeader(code)
     w.Write(fmt.Appendf(nil, `{"error": "%s"}`, message))
+}
+
+func respondUnauthorized(w http.ResponseWriter) {
+    w.Header().Set("Content-Type", "application/json")
+    w.WriteHeader(401)
+    w.Write(fmt.Appendf(nil, `{"message": "%s"}`, "unauthorized"))
 }

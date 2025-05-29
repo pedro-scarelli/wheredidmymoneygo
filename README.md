@@ -41,39 +41,40 @@ docker compose up -d
 Endpoints da API
 
 URL base: http://localhost:3000
+
 ### Registrar conta
+
 POST /account HTTP/1.1
 Content-Type: application/json
 
 {
-    "firstName": "{PRIMEIRO_NOME}",
-    "lastName": "{ULTIMO_NOME}",
-    "cpf": "{CPF}",
-    "email": "{EMAIL}",
-    "password": "{SENHA}"
+"firstName": "{PRIMEIRO_NOME}",
+"lastName": "{ULTIMO_NOME}",
+"cpf": "{CPF}",
+"email": "{EMAIL}",
+"password": "{SENHA}"
 }
 
-### Buscar todas as contas
-GET /account?page={PAGINA}&temsPerPage={ITENS_POR_PAGINA} HTTP/1.1
-Authorization: Bearer {TOKEN_DO_USUARIO}
-
 ### Buscar conta por ID
+
 GET /account/{ID} HTTP/1.1
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
 ### Atualizar conta
+
 PATCH /account HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
 {
-    "id": "{ID}",
-    "firstName": "{PRIMEIRO_NOME}",
-    "lastName": "{ULTIMO_NOME}",
-    "password": "{SENHA}"
+"id": "{ID}",
+"firstName": "{PRIMEIRO_NOME}",
+"lastName": "{ULTIMO_NOME}",
+"password": "{SENHA}"
 }
 
 ### Deletar conta por ID
+
 DELETE /account/{ID} HTTP/1.1
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
@@ -84,8 +85,8 @@ POST /login HTTP/1.1
 Content-Type: application/json
 
 {
-    "email": "{EMAIL}",
-    "password": "{SENHA}"
+"email": "{EMAIL}",
+"password": "{SENHA}"
 }
 
 Retorna token de autenticação
@@ -96,9 +97,9 @@ POST /account/movement'
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
 {
-    "value": {VALOR_COM_2_CASAS_APOS_A_VIRGULA},
-    "type": "{CREDITO_OU_DEBITO}"
-    "recurrence": {NUMERO_DE_RECORRENCIA - 1 A 12},
-    "dueDate": "{DATA_NO_FORMATO 2025-05-27T00:00:00Z}",
-    "description": "{DESCRICAO}"
+"value": {VALOR_COM_2_CASAS_APOS_A_VIRGULA},
+"type": "{CREDITO_OU_DEBITO}"
+"recurrence": {NUMERO_DE_RECORRENCIA - 1 A 12},
+"dueDate": "{DATA_NO_FORMATO 2025-05-27T00:00:00Z}",
+"description": "{DESCRICAO}"
 }

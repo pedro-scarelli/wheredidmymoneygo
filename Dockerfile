@@ -1,9 +1,5 @@
 FROM golang:1.24.3-bookworm as builder
-
 WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod tidy
-
 COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -installsuffix cgo -o go-api ./adapter/http/main.go
 
