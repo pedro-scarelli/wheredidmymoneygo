@@ -16,7 +16,7 @@ type PublicAccount struct {
 	Number    int64     `json:"number"`
 	CPF       string    `json:"cpf"`
 	Email     string    `json:"email"`
-	Balance   int64     `json:"balance"`
+	Balance   float64       `json:"balance"`
 	CreatedAt time.Time `json:"createdAt"`
 }
 
@@ -66,4 +66,5 @@ type AccountRepository interface {
 	GetAccountByID(accountID string) (*Account, error)
 	GetAccountByEmail(email string) (*Account, error)
 	Movement(movementRequestDto *accountRequestDto.MovementRequestDTO, createdAt time.Time) error
+	GetAccountBalance(accountID string) (int, error)
 }

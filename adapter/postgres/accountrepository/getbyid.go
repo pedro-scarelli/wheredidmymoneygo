@@ -12,7 +12,7 @@ func (repository repository) GetAccountByID(accountID string) (*domain.Account, 
 	ctx := context.Background()
 	row := repository.db.QueryRow(ctx,
 		`select 
-		pk_st_id, st_first_name, st_last_name, st_cpf, st_email, it_number, it_balance, dt_created_at, st_password
+		pk_st_id, st_first_name, st_last_name, st_cpf, st_email, it_number, dt_created_at, st_password
 		from tb_account
 		where pk_st_id = $1`,
 		accountID)
@@ -34,7 +34,6 @@ func scanIntoAccount(row pgx.Row) (*domain.Account, error) {
 		&account.CPF,
 		&account.Email,
 		&account.Number,
-		&account.Balance,
 		&account.CreatedAt,
 		&account.Password,
 	)

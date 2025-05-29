@@ -6,6 +6,5 @@ CREATE TABLE tb_account (
   st_email VARCHAR(100) UNIQUE NOT NULL,
   st_password VARCHAR(255) NOT NULL,
   it_number SERIAL UNIQUE,
-  it_balance INTEGER NOT NULL,
   dt_created_at TIMESTAMP NOT NULL
 );

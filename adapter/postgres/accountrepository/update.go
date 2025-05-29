@@ -14,8 +14,7 @@ func (repository repository) Update(updateAccountRequestDto *dto.UpdateAccountRe
 		SET st_first_name = $1,
 		    st_last_name  = $2,
 		    st_password   = $3
-		WHERE pk_st_id = $4
-		RETURNING pk_st_id, st_first_name, st_last_name, st_password, it_number, st_cpf, st_email, it_balance;
+		WHERE pk_st_id = $4;
 	    `
 
 	_, err := repository.db.Exec(

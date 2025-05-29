@@ -10,7 +10,7 @@
 
     🔐 Login baseado em JWT e rotas protegidas
 
-    📊 Planejado: Exportação de movimentos pra pranilha de Excel
+    📊 Planejado: Saldo dinâmico com base nas movimentações e exportação de movimentos com saldo pra pranilha de Excel
 
 ## 📦 Pré-requisitos
 
