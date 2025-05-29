@@ -31,7 +31,6 @@ func main() {
 	protectedRouter.Use(middleware.JwtAuthorizer(accountUseCase))
 
 	protectedRouter.Handle("/account", http.HandlerFunc(accountService.Update)).Methods("PATCH")
-	protectedRouter.Handle("/account", http.HandlerFunc(accountService.Get)).Methods("GET")
 	protectedRouter.Handle("/account/{id}", http.HandlerFunc(accountService.GetByID)).Methods("GET")
 	protectedRouter.Handle("/account/{id}", http.HandlerFunc(accountService.Delete)).Methods("DELETE")
 
