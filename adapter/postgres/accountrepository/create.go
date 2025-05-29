@@ -16,8 +16,8 @@ func (repository repository) Create(accountRequest *dto.CreateAccountRequestDTO,
 	err := repository.db.QueryRow(
 		ctx,
 		`INSERT INTO tb_account
-		(pk_st_id, st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, it_balance, dt_created_at)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+		(pk_st_id, st_first_name, st_last_name, st_cpf, st_email, st_password, it_number, dt_created_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 		returning *`,
 		uuid.New().String(),
 		accountRequest.FirstName,
@@ -26,7 +26,6 @@ func (repository repository) Create(accountRequest *dto.CreateAccountRequestDTO,
 		accountRequest.Email,
 		accountRequest.Password,
 		accountNumber,
-		0,
 		createdAt,
 	).Scan(
 		&account.ID,
@@ -36,7 +35,6 @@ func (repository repository) Create(accountRequest *dto.CreateAccountRequestDTO,
 		&account.Email,
 		&account.Password,
 		&account.Number,
-		&account.Balance,
 		&account.CreatedAt,
 	)
 
@@ -50,7 +48,7 @@ func (repository repository) Create(accountRequest *dto.CreateAccountRequestDTO,
 		CPF:       account.CPF,
 		Email:     account.Email,
 		Number:    account.Number,
-		Balance:   account.Balance,
+		Balance:   0,
 		CreatedAt: account.CreatedAt,
 	}
 
