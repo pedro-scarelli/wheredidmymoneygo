@@ -2,13 +2,13 @@
 
 ## Uma API RESTful simples em Go para rastreamento de despesas pessoais.
 
-⚙️ Status: Em desenvolvimento !! – gerenciamento de usuários e autenticação já implementados.
-
 ### Recursos
 
     👤 Registro e gerenciamento de usuários
 
     🔐 Login baseado em JWT e rotas protegidas
+
+    💸 Registro de movimentações e saldo dinâmico com base nas movimentações
 
     📊 Planejado: Exportação de movimentos com saldo pra pranilha de Excel
 
@@ -42,38 +42,40 @@ Endpoints da API
 
 URL base: http://localhost:3000
 
-### Registrar conta
+## Registrar conta
 
 POST /account HTTP/1.1
 Content-Type: application/json
 
+```json
 {
-"firstName": "{PRIMEIRO_NOME}",
-"lastName": "{ULTIMO_NOME}",
-"cpf": "{CPF}",
-"email": "{EMAIL}",
-"password": "{SENHA}"
+    "firstName": "{PRIMEIRO_NOME}",
+    "lastName": "{ULTIMO_NOME}",
+    "cpf": "{CPF}",
+    "email": "{EMAIL}",
+    "password": "{SENHA}"
 }
-
-### Buscar conta por ID
+```
+## Buscar conta por ID
 
 GET /account/{ID} HTTP/1.1
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
-### Atualizar conta
+## Atualizar conta
 
 PATCH /account HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
+```json
 {
-"id": "{ID}",
-"firstName": "{PRIMEIRO_NOME}",
-"lastName": "{ULTIMO_NOME}",
-"password": "{SENHA}"
+    "id": "{ID}",
+    "firstName": "{PRIMEIRO_NOME}",
+    "lastName": "{ULTIMO_NOME}",
+    "password": "{SENHA}"
 }
-
-### Deletar conta por ID
+```
+## Deletar conta por ID
 
 DELETE /account/{ID} HTTP/1.1
 Authorization: Bearer {TOKEN_DO_USUARIO}
@@ -84,11 +86,12 @@ Método Rota Auth Descrição
 POST /login HTTP/1.1
 Content-Type: application/json
 
+```json
 {
-"email": "{EMAIL}",
-"password": "{SENHA}"
+    "email": "{EMAIL}",
+    "password": "{SENHA}"
 }
-
+```
 Retorna token de autenticação
 
 ## Movimentação
@@ -96,10 +99,12 @@ Retorna token de autenticação
 POST /account/movement'
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
+```json
 {
-"value": {VALOR_COM_2_CASAS_APOS_A_VIRGULA},
-"type": "{CREDITO_OU_DEBITO}"
-"recurrence": {NUMERO_DE_RECORRENCIA - 1 A 12},
-"dueDate": "{DATA_NO_FORMATO 2025-05-27T00:00:00Z}",
-"description": "{DESCRICAO}"
+    "value": {VALOR_COM_2_CASAS_APOS_A_VIRGULA},
+    "type": "{CREDITO_OU_DEBITO}"
+    "recurrence": {NUMERO_DE_RECORRENCIA - 1 A 12},
+    "dueDate": "{DATA_NO_FORMATO 2025-05-27T00:00:00Z}",
+    "description": "{DESCRICAO}"
 }
+```
