@@ -3,9 +3,10 @@ package accountrepository
 import (
 	"context"
 	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 	dto "github.com/pedro-scarelli/wheredidmymoneygo/core/dto/account/request"
-	"time"
 )
 
 func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO, createdAt time.Time) error {
@@ -24,15 +25,14 @@ func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO
 
 	query := `
         INSERT INTO tb_movement 
-            (pk_st_id, it_value, dt_due_date, st_type, st_account_id, st_description, dt_created_at)
+            (pk_st_id, it_value, dt_due_date, st_account_id, st_description, dt_created_at)
         SELECT 
             unnest($1::uuid[]), 
             unnest($2::integer[]), 
-            unnest($3::date[]), 
+            unnest($3::date[]),
             unnest($4::text[]), 
             unnest($5::text[]), 
-            unnest($6::text[]), 
-            unnest($7::timestamp[])
+            unnest($6::timestamp[])
     `
 
 	_, err := repository.db.Exec(
@@ -41,7 +41,6 @@ func (repository repository) Movement(movementRequestDto *dto.MovementRequestDTO
 		ids,
 		values,
 		dueDates,
-		RepeatString(string(movementRequestDto.Type), recurrence),
 		RepeatString(movementRequestDto.AccountID, recurrence),
 		RepeatString(movementRequestDto.Description, recurrence),
 		RepeatTime(createdAt, recurrence),
