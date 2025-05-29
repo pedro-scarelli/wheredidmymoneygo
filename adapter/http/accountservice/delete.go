@@ -24,7 +24,7 @@ func (service service) Delete(response http.ResponseWriter, request *http.Reques
 	}
 
 	json.NewEncoder(response).Encode(map[string]any{
-		"message": "Usuário deletado com sucesso",
+		"message": "user deleted successfully",
 		"userID":  accountID,
 	},
 	)
