@@ -42,7 +42,7 @@ Endpoints da API
 
 URL base: http://localhost:3000
 
-### Registrar conta
+## Registrar conta
 
 POST /account HTTP/1.1
 Content-Type: application/json
@@ -55,12 +55,12 @@ Content-Type: application/json
 "password": "{SENHA}"
 }
 
-### Buscar conta por ID
+## Buscar conta por ID
 
 GET /account/{ID} HTTP/1.1
 Authorization: Bearer {TOKEN_DO_USUARIO}
 
-### Atualizar conta
+## Atualizar conta
 
 PATCH /account HTTP/1.1
 Content-Type: application/json
@@ -73,7 +73,7 @@ Authorization: Bearer {TOKEN_DO_USUARIO}
 "password": "{SENHA}"
 }
 
-### Deletar conta por ID
+## Deletar conta por ID
 
 DELETE /account/{ID} HTTP/1.1
 Authorization: Bearer {TOKEN_DO_USUARIO}
