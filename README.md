@@ -2,8 +2,6 @@
 
 ## Uma API RESTful simples em Go para rastreamento de despesas pessoais.
 
-⚙️ Status: Em desenvolvimento !! – gerenciamento de usuários e autenticação já implementados.
-
 ### Recursos
 
     👤 Registro e gerenciamento de usuários
