@@ -10,27 +10,27 @@ import (
 )
 
 type PublicAccount struct {
-	ID        string    `json:"id"`
-	FirstName string    `json:"firstName"`
-	LastName  string    `json:"lastName"`
-	Number    int64     `json:"number"`
-	CPF       string    `json:"cpf"`
-	Email     string    `json:"email"`
-	Balance   float64       `json:"balance"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID           string    `json:"id"`
+	FirstName    string    `json:"firstName"`
+	LastName     string    `json:"lastName"`
+	Number       int64     `json:"number"`
+	CPF          string    `json:"cpf"`
+	Email        string    `json:"email"`
+	MonthBalance float64   `json:"monthBalance"`
+	CreatedAt    time.Time `json:"createdAt"`
 }
 
 type Account struct {
-	ID        string    `json:"id"`
-	FirstName string    `json:"firstName"`
-	LastName  string    `json:"lastName"`
-	Number    int64     `json:"number"`
-	CPF       string    `json:"cpf"`
-	Email     string    `json:"email"`
-	Password  string    `json:"password"`
-	Balance   int64     `json:"balance"`
-	CreatedAt time.Time `json:"createdAt"`
-	DeletedAt time.Time `json:"deletedAt"`
+	ID           string    `json:"id"`
+	FirstName    string    `json:"firstName"`
+	LastName     string    `json:"lastName"`
+	Number       int64     `json:"number"`
+	CPF          string    `json:"cpf"`
+	Email        string    `json:"email"`
+	Password     string    `json:"password"`
+	MonthBalance int64     `json:"monthBalance"`
+	CreatedAt    time.Time `json:"createdAt"`
+	DeletedAt    time.Time `json:"deletedAt"`
 }
 
 type Movement struct {
