@@ -11,11 +11,11 @@ import (
 func (usecase usecase) Login(loginRequestDto *requestDto.LoginRequestDTO) (*responseDto.LoginResponseDTO, error) {
 	account, err := usecase.repository.GetAccountByEmail(loginRequestDto.Email)
 	if err != nil {
-		return nil, fmt.Errorf("e-mail ou senha incorretos")
+		return nil, fmt.Errorf("incorrect email or password")
 	}
 
 	if security.IsPasswordIncorrect(loginRequestDto.Password, account.Password) {
-		return nil, fmt.Errorf("e-mail ou senha incorretos")
+		return nil, fmt.Errorf("incorrect email or password")
 	}
 
 	jwtToken := security.GenerateJwtToken(account.ID)

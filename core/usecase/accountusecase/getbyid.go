@@ -14,7 +14,7 @@ func (usecase usecase) GetByID(accountID string) (*domain.PublicAccount, error) 
 		}
 		return nil, errors.New("failed to get account")
 	}
-	
+
 	balance, err := usecase.repository.GetAccountBalance(accountID)
 	if err != nil {
 		if errors.Is(err, domain.ErrAccountNotFound) {
@@ -23,16 +23,15 @@ func (usecase usecase) GetByID(accountID string) (*domain.PublicAccount, error) 
 		return nil, errors.New("failed to get account movements")
 	}
 
-
 	publicAccount := &domain.PublicAccount{
-		ID:        account.ID,
-		FirstName: account.FirstName,
-		LastName:  account.LastName,
-		Number:    account.Number,
-		CPF:       account.CPF,
-		Email:     account.Email,
-		Balance:   float64(balance) / 100,
-		CreatedAt: account.CreatedAt,
+		ID:           account.ID,
+		FirstName:    account.FirstName,
+		LastName:     account.LastName,
+		Number:       account.Number,
+		CPF:          account.CPF,
+		Email:        account.Email,
+		MonthBalance: float64(balance) / 100,
+		CreatedAt:    account.CreatedAt,
 	}
 
 	return publicAccount, nil

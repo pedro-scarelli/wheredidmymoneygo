@@ -42,14 +42,14 @@ func (repository repository) Create(accountRequest *dto.CreateAccountRequestDTO,
 		return nil, err
 	}
 	publicAccount := domain.PublicAccount{
-		ID:        account.ID,
-		FirstName: account.FirstName,
-		LastName:  account.LastName,
-		CPF:       account.CPF,
-		Email:     account.Email,
-		Number:    account.Number,
-		Balance:   0,
-		CreatedAt: account.CreatedAt,
+		ID:           account.ID,
+		FirstName:    account.FirstName,
+		LastName:     account.LastName,
+		CPF:          account.CPF,
+		Email:        account.Email,
+		Number:       account.Number,
+		MonthBalance: 0,
+		CreatedAt:    account.CreatedAt,
 	}
 
 	return &publicAccount, nil

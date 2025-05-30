@@ -12,15 +12,15 @@ func (service service) Login(response http.ResponseWriter, request *http.Request
 	response.Header().Add("Content-Type", "application/json")
 	if err != nil {
 		response.WriteHeader(500)
-		response.Write([]byte(err.Error()))
+		json.NewEncoder(response).Encode(map[string]string{"error": err.Error()})
 		return
 	}
 
 	loginResponseDto, err := service.usecase.Login(loginRequestDto)
 
 	if err != nil {
-		response.WriteHeader(500)
-		response.Write([]byte(err.Error()))
+		response.WriteHeader(401)
+		json.NewEncoder(response).Encode(map[string]string{"message": err.Error()})
 		return
 	}
 	json.NewEncoder(response).Encode(loginResponseDto)
