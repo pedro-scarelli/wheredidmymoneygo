@@ -14,12 +14,9 @@ services:
       timeout: 5s
       retries: 5
 
-  backend:
+  api:
     build:
-      context: .
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
+      context: ./api
     ports:
       - "3000:3000"
     env_file:
@@ -29,6 +26,14 @@ services:
     depends_on:
       database:
         condition: service_healthy
+
+  ui:
+    build:
+      context: ./ui
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./:/angular-app
 
 volumes:
   postgres_data:
